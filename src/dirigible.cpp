@@ -30,3 +30,9 @@ CharacterVector driver_gdal(CharacterVector dsn) {
 CharacterVector layer_names_gdal(CharacterVector dsn) {
   return gdalheaders::gdal_layer_names(dsn);
 }
+// [[Rcpp::export]]
+DoubleVector feature_count_gdal(CharacterVector dsn,  // double, could be a lot of features
+                     IntegerVector layer,
+                     LogicalVector iterate) {
+ return gdalheaders::gdal_feature_count(dsn, layer, iterate);
+}

@@ -17,3 +17,7 @@ layer_names_gdal <- function(dsn) {
     .Call(`_dirigible_layer_names_gdal`, dsn)
 }
 
+feature_count_gdal <- function(dsn, layer, iterate) {
+    .Call(`_dirigible_feature_count_gdal`, dsn, layer, iterate)
+}
+

@@ -20,8 +20,45 @@ namespace gdalheaders {
    inline void osr_cleanup() {
     OSRCleanup();
   }
+
+  inline DoubleVector gdal_feature_count(CharacterVector dsource,
+                                      IntegerVector layer,
+                                      LogicalVector iterate) {
+    GDALDataset       *poDS;
+    poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+    if( poDS == NULL )
+    {
+      Rcpp::stop("Open failed.\n");
+    }
+    OGRLayer  *aLayer;
+    int nlayer = poDS->GetLayerCount();
+    if (layer[0] >= nlayer) {
+      Rprintf("layer count: %i\n", nlayer);
+      Rprintf("layer index: %i\n", layer[0]);
+      Rcpp::stop("layer index exceeds layer count");
+    }
+    aLayer =  poDS->GetLayer(layer[0]);
+    OGRFeature *aFeature;
+    aLayer->ResetReading();
+    double nFeature = (double)aLayer->GetFeatureCount();
+    if (iterate) {
+      nFeature = 0;
+      while( (aFeature = aLayer->GetNextFeature()) != NULL )
+      {
+        nFeature++;
+        OGRFeature::DestroyFeature(aFeature);
+      }
+
+    }
+    GDALClose( poDS );
+
+    DoubleVector out(1);
+    out[0] = nFeature;
+    return(out);
+  }
   inline Rcpp::CharacterVector gdal_driver(Rcpp::CharacterVector dsource)
   {
+
     GDALDataset       *poDS;
     poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
     if( poDS == NULL )

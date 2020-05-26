@@ -19,13 +19,23 @@ Linux only for now. This merely proves that I am not completely lost.
 
 ``` r
 library(dirigible)
-dirigible:::driver_gdal("../vapour/inst/extdata/tab/list_locality_postcode_meander_valley.tab")
-Error in dirigible:::driver_gdal("../vapour/inst/extdata/tab/list_locality_postcode_meander_valley.tab") : 
-  Open failed.
-dirigible:::register_gdal()  ## vapour did this every time code was run (should be in .onLoad() along with file-path DATA envvars)
-[1] TRUE
-dirigible:::driver_gdal("../vapour/inst/extdata/tab/list_locality_postcode_meander_valley.tab")
-[1] "MapInfo File"
+f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
+dirigible:::driver_gdal(f)
+#> [1] "MapInfo File"
+dirigible:::feature_count_gdal(f, layer = 0, iterate = FALSE)
+#> [1] 58
+
+dirigible:::layer_names_gdal(f)
+#> [1] "list_locality_postcode_meander_valley"
+
+## white zone
+dirigible:::dirigible_unload_gdal()
+try(dirigible:::layer_names_gdal(f))
+#> Error in dirigible:::layer_names_gdal(f) : Open failed.
+dirigible:::dirigible_load_gdal()
+#> [1] TRUE
+dirigible:::layer_names_gdal(f)
+#> [1] "list_locality_postcode_meander_valley"
 ```
 
 -----

@@ -29,15 +29,20 @@ TBD but don't do it this will break your system
 Linux only for now.  This merely proves that I am not completely lost. 
 
 
-```{r example, eval=FALSE, include=TRUE}
+```{r example, eval=TRUE, include=TRUE}
 library(dirigible)
-dirigible:::driver_gdal("../vapour/inst/extdata/tab/list_locality_postcode_meander_valley.tab")
-Error in dirigible:::driver_gdal("../vapour/inst/extdata/tab/list_locality_postcode_meander_valley.tab") : 
-  Open failed.
-dirigible:::register_gdal()  ## vapour did this every time code was run (should be in .onLoad() along with file-path DATA envvars)
-[1] TRUE
-dirigible:::driver_gdal("../vapour/inst/extdata/tab/list_locality_postcode_meander_valley.tab")
-[1] "MapInfo File"
+f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
+dirigible:::driver_gdal(f)
+dirigible:::feature_count_gdal(f, layer = 0, iterate = FALSE)
+
+dirigible:::layer_names_gdal(f)
+
+## white zone
+dirigible:::dirigible_unload_gdal()
+try(dirigible:::layer_names_gdal(f))
+dirigible:::dirigible_load_gdal()
+dirigible:::layer_names_gdal(f)
+
 ```
 
 ---
