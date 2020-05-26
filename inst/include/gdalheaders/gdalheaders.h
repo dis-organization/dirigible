@@ -1,17 +1,25 @@
-#ifndef GDALVECTOR_H
-#define GDALVECTOR_H
+#ifndef GDALHEADERS_H
+#define GDALHEADERS_H
 #include <Rcpp.h>
 #include "ogrsf_frmts.h"
-#include "ogr_api.h"
+//#include "ogr_api.h"
+#include "gdal_priv.h"
 
-
-namespace gdalvector {
+namespace gdalheaders {
   using namespace Rcpp;
 
-  inline void gdal_register() {
+  inline void gdal_register_all() {
     GDALAllRegister();
   }
-
+  inline void ogr_register_all() {
+    OGRRegisterAll();
+  }
+  inline void ogr_cleanup_all() {
+    OGRCleanupAll();
+  }
+   inline void osr_cleanup() {
+    OSRCleanup();
+  }
   inline Rcpp::CharacterVector gdal_driver(Rcpp::CharacterVector dsource)
   {
     GDALDataset       *poDS;
@@ -57,7 +65,7 @@ namespace gdalvector {
     return(lnames);
   } // gdal_layer_names
 
-} // namespace gdalvector
+} // namespace gdalheaders
 #endif
 
 

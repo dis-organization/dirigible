@@ -15,6 +15,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cleanup_gdal
+LogicalVector cleanup_gdal();
+RcppExport SEXP _dirigible_cleanup_gdal() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(cleanup_gdal());
+    return rcpp_result_gen;
+END_RCPP
+}
 // driver_gdal
 CharacterVector driver_gdal(CharacterVector dsn);
 RcppExport SEXP _dirigible_driver_gdal(SEXP dsnSEXP) {
@@ -26,10 +36,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// layer_names_gdal
+CharacterVector layer_names_gdal(CharacterVector dsn);
+RcppExport SEXP _dirigible_layer_names_gdal(SEXP dsnSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    rcpp_result_gen = Rcpp::wrap(layer_names_gdal(dsn));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal", (DL_FUNC) &_dirigible_register_gdal, 0},
+    {"_dirigible_cleanup_gdal", (DL_FUNC) &_dirigible_cleanup_gdal, 0},
     {"_dirigible_driver_gdal", (DL_FUNC) &_dirigible_driver_gdal, 1},
+    {"_dirigible_layer_names_gdal", (DL_FUNC) &_dirigible_layer_names_gdal, 1},
     {NULL, NULL, 0}
 };
 

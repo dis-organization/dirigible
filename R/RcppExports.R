@@ -5,7 +5,15 @@ register_gdal <- function() {
     .Call(`_dirigible_register_gdal`)
 }
 
+cleanup_gdal <- function() {
+    .Call(`_dirigible_cleanup_gdal`)
+}
+
 driver_gdal <- function(dsn) {
     .Call(`_dirigible_driver_gdal`, dsn)
+}
+
+layer_names_gdal <- function(dsn) {
+    .Call(`_dirigible_layer_names_gdal`, dsn)
 }
 
