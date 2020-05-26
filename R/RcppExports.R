@@ -21,3 +21,7 @@ feature_count_gdal <- function(dsn, layer, iterate) {
     .Call(`_dirigible_feature_count_gdal`, dsn, layer, iterate)
 }
 
+read_fields_gdal <- function(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name) {
+    .Call(`_dirigible_read_fields_gdal`, dsource, layer, sql, limit_n, skip_n, ex, fid_column_name)
+}
+

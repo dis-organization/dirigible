@@ -60,6 +60,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// read_fields_gdal
+List read_fields_gdal(Rcpp::CharacterVector dsource, Rcpp::IntegerVector layer, Rcpp::CharacterVector sql, Rcpp::IntegerVector limit_n, Rcpp::IntegerVector skip_n, Rcpp::NumericVector ex, Rcpp::CharacterVector fid_column_name);
+RcppExport SEXP _dirigible_read_fields_gdal(SEXP dsourceSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP, SEXP fid_column_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dsource(dsourceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type limit_n(limit_nSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type skip_n(skip_nSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type fid_column_name(fid_column_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_fields_gdal(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal", (DL_FUNC) &_dirigible_register_gdal, 0},
@@ -67,6 +84,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_driver_gdal", (DL_FUNC) &_dirigible_driver_gdal, 1},
     {"_dirigible_layer_names_gdal", (DL_FUNC) &_dirigible_layer_names_gdal, 1},
     {"_dirigible_feature_count_gdal", (DL_FUNC) &_dirigible_feature_count_gdal, 3},
+    {"_dirigible_read_fields_gdal", (DL_FUNC) &_dirigible_read_fields_gdal, 7},
     {NULL, NULL, 0}
 };
 

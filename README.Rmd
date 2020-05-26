@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -26,16 +28,26 @@ TBD but don't do it this will break your system
 
 ## Example
 
-Linux only for now.  This merely proves that I am not completely lost. 
+Linux only for now.  
 
 
 ```{r example, eval=TRUE, include=TRUE}
 library(dirigible)
 f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
+
+## name of driver in use
 dirigible:::driver_gdal(f)
+
+## layer feature count
 dirigible:::feature_count_gdal(f, layer = 0, iterate = FALSE)
 
+## vector layer names
 dirigible:::layer_names_gdal(f)
+
+## read fields
+as.data.frame(dirigible:::read_fields_gdal(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
+ 
+
 
 ## white zone
 dirigible:::dirigible_unload_gdal()

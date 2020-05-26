@@ -36,3 +36,14 @@ DoubleVector feature_count_gdal(CharacterVector dsn,  // double, could be a lot 
                      LogicalVector iterate) {
  return gdalheaders::gdal_feature_count(dsn, layer, iterate);
 }
+
+// [[Rcpp::export]]
+List read_fields_gdal(Rcpp::CharacterVector dsource,
+                      Rcpp::IntegerVector layer,
+                      Rcpp::CharacterVector sql,
+                      Rcpp::IntegerVector limit_n,
+                      Rcpp::IntegerVector skip_n,
+                      Rcpp::NumericVector ex,
+                      Rcpp::CharacterVector fid_column_name) {
+  return gdalheaders::gdal_read_fields(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name);
+}

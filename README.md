@@ -15,18 +15,34 @@ TBD but don’t do it this will break your system
 
 ## Example
 
-Linux only for now. This merely proves that I am not completely lost.
+Linux only for now.
 
 ``` r
 library(dirigible)
 f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
+
+## name of driver in use
 dirigible:::driver_gdal(f)
 #> [1] "MapInfo File"
+
+## layer feature count
 dirigible:::feature_count_gdal(f, layer = 0, iterate = FALSE)
 #> [1] 58
 
+## vector layer names
 dirigible:::layer_names_gdal(f)
 #> [1] "list_locality_postcode_meander_valley"
+
+## read fields
+as.data.frame(dirigible:::read_fields_gdal(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
+#>   LOCAL_ID     NAME POSTCODE PLAN_REF   GAZ_DATE NOM_REG_NO
+#> 1   100422 Caveside     7304  CPR5322 1970-01-01       947L
+#>                                      UFI          CREATED_ON
+#> 1 {4a5db4da-ca19-41a0-8dd4-c28a14bbee18} 2016-03-04 10:42:37
+#>                                LIST_GUID SHAPE_AREA SHAPE_LEN
+#> 1 {839edd46-01a7-4a45-9d97-499962fa952b}      -9999  39785.88
+ 
+
 
 ## white zone
 dirigible:::dirigible_unload_gdal()
