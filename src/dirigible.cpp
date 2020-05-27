@@ -38,18 +38,18 @@ DoubleVector feature_count_gdal_cpp(CharacterVector dsn,  // double, could be a 
 }
 
 // [[Rcpp::export]]
-List read_fields_gdal_cpp(CharacterVector dsource,
+List read_fields_gdal_cpp(CharacterVector dsn,
                       IntegerVector layer,
                       CharacterVector sql,
                       IntegerVector limit_n,
                       IntegerVector skip_n,
                       NumericVector ex,
                       CharacterVector fid_column_name) {
-  return gdalheaders::gdal_read_fields(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name);
+  return gdalheaders::gdal_read_fields(dsn, layer, sql, limit_n, skip_n, ex, fid_column_name);
 }
 
 // [[Rcpp::export]]
-List read_geometry_gdal_cpp(CharacterVector dsource,
+List read_geometry_gdal_cpp(CharacterVector dsn,
                          IntegerVector layer,
                          CharacterVector sql,
                          CharacterVector what,
@@ -57,17 +57,24 @@ List read_geometry_gdal_cpp(CharacterVector dsource,
                          IntegerVector limit_n,
                          IntegerVector skip_n,
                          NumericVector ex ) {
-  return gdalheaders::gdal_read_geometry(dsource, layer, sql, what, textformat, limit_n, skip_n, ex);
+  return gdalheaders::gdal_read_geometry(dsn, layer, sql, what, textformat, limit_n, skip_n, ex);
 }
 
 
 
 // [[Rcpp::export]]
-List read_names_gdal_cpp(CharacterVector dsource,
+List read_names_gdal_cpp(CharacterVector dsn,
                         IntegerVector layer,
                         CharacterVector sql,
                         IntegerVector limit_n,
                         IntegerVector skip_n,
                         NumericVector ex ) {
-  return gdalheaders::gdal_read_names(dsource, layer, sql, limit_n, skip_n, ex);
+  return gdalheaders::gdal_read_names(dsn, layer, sql, limit_n, skip_n, ex);
+}
+
+// [[Rcpp::export]]
+List projection_info_gdal_cpp(CharacterVector dsn,
+                         IntegerVector layer,
+                         CharacterVector sql) {
+  return gdalheaders::gdal_projection_info(dsn, layer, sql);
 }

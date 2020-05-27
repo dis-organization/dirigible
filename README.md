@@ -7,7 +7,8 @@
 
 <!-- badges: end -->
 
-A fresh attempt at vapour. GDAL for R using a headers appraoch.
+GDAL headers for R. (A fresh attempt at vapour with a firmer re-use
+basis).
 
 ## Installation
 
@@ -56,6 +57,13 @@ unlist(dirigible:::read_names_gdal_cpp(osm,
                             limit_n = 0, 
                             skip_n = 0, ex = 0))
 #> [1] 100 101 102 103 104
+
+## read proj info
+names(dirigible:::projection_info_gdal_cpp(f, layer = 0, sql = ""))
+#> Warning in dirigible:::projection_info_gdal_cpp(f, layer = 0, sql = ""): not
+#> null
+#> [1] "Proj4"      "MICoordSys" "PrettyWkt"  "Wkt"        "EPSG"      
+#> [6] "XML"
 
 ## read geometry
 str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",

@@ -97,7 +97,7 @@ inline Rcpp::List allocate_fields_list(OGRFeatureDefn *poFDefn, int n_features, 
 
 
 // [[Rcpp::export]]
-List gdal_read_fields(CharacterVector dsource,
+List gdal_read_fields(CharacterVector dsn,
                       IntegerVector layer,
                       CharacterVector sql,
                       IntegerVector limit_n,
@@ -106,7 +106,7 @@ List gdal_read_fields(CharacterVector dsource,
                       CharacterVector fid_column_name)
 {
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
@@ -246,11 +246,11 @@ List gdal_read_fields(CharacterVector dsource,
 }
 
 
-inline DoubleVector gdal_feature_count(CharacterVector dsource,
+inline DoubleVector gdal_feature_count(CharacterVector dsn,
                                        IntegerVector layer,
                                        LogicalVector iterate) {
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
@@ -282,11 +282,11 @@ inline DoubleVector gdal_feature_count(CharacterVector dsource,
   return(out);
 }
 
-inline CharacterVector gdal_driver(CharacterVector dsource)
+inline CharacterVector gdal_driver(CharacterVector dsn)
 {
 
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
@@ -297,11 +297,11 @@ inline CharacterVector gdal_driver(CharacterVector dsource)
   return(dname);
 } // gdal_driver
 
-inline CharacterVector gdal_layer_names(CharacterVector dsource,
+inline CharacterVector gdal_layer_names(CharacterVector dsn,
                                               CharacterVector sql = "")
 {
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
@@ -331,7 +331,7 @@ inline CharacterVector gdal_layer_names(CharacterVector dsource,
 
 
 // [[Rcpp::export]]
-inline List gdal_read_geometry(CharacterVector dsource,
+inline List gdal_read_geometry(CharacterVector dsn,
                                      IntegerVector layer,
                                      CharacterVector sql,
                                      CharacterVector what,
@@ -340,9 +340,8 @@ inline List gdal_read_geometry(CharacterVector dsource,
                                      IntegerVector skip_n,
                                      NumericVector ex)
 {
-  GDALAllRegister();
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
@@ -551,16 +550,16 @@ inline List gdal_read_geometry(CharacterVector dsource,
 
 
 // [[Rcpp::export]]
-inline List gdal_read_names(CharacterVector dsource,
+inline List gdal_read_names(CharacterVector dsn,
                            IntegerVector layer,
                            CharacterVector sql,
                            IntegerVector limit_n,
                            IntegerVector skip_n,
                            NumericVector ex)
 {
-  GDALAllRegister();
+
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
@@ -672,6 +671,92 @@ inline List gdal_read_names(CharacterVector dsource,
   }
   return(feature_xx.vector());
 }
+
+
+
+// [[Rcpp::export]]
+List gdal_projection_info(CharacterVector dsn,
+                                IntegerVector layer,
+                                CharacterVector sql)
+{
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer  *poLayer;
+  if (sql[0] != "") {
+    poLayer =  poDS->ExecuteSQL(sql[0],
+                                NULL,
+                                NULL );
+
+    if (poLayer == NULL) {
+      Rcpp::stop("SQL execution failed.\n");
+    }
+
+  } else {
+    poLayer =  poDS->GetLayer(layer[0]);
+  }
+  if (poLayer == NULL) {
+    Rcpp::stop("Layer open failed.\n");
+  }
+  OGRSpatialReference *SRS =  poLayer->GetSpatialRef();
+
+  char *proj;  // this gets cleaned up lower in the SRS==NULL else
+  List info_out(6);
+  CharacterVector outproj(1);
+  CharacterVector outnames(6);
+  outnames[0] = "Proj4";
+  outnames[1] = "MICoordSys";
+  outnames[2] = "PrettyWkt";
+  outnames[3] = "Wkt";
+  outnames[4] = "EPSG";
+  outnames[5] = "XML";
+  info_out.attr("names") = outnames;
+
+  if (SRS == NULL) {
+    //Rcpp::warning("null");
+    // do nothing, or warn
+    // e.g. .shp with no .prj
+  } else {
+    Rcpp::warning("not null");
+    // SRS is not NULL, so explore validation
+    //  OGRErr err = SRS->Validate();
+    SRS->exportToProj4(&proj);
+    outproj[0] = proj;
+    info_out[0] = Rcpp::clone(outproj);
+
+    SRS->exportToMICoordSys(&proj);
+    outproj[0] = proj;
+    info_out[1] = Rcpp::clone(outproj);
+
+    SRS->exportToPrettyWkt(&proj, false);
+    outproj[0] = proj;
+    info_out[2] = Rcpp::clone(outproj);
+
+    SRS->exportToWkt(&proj);
+    outproj[0] = proj;
+    info_out[3] = Rcpp::clone(outproj);
+
+    int epsg = SRS->GetEPSGGeogCS();
+    info_out[4] = epsg;
+
+    SRS->exportToXML(&proj);
+    outproj[0] = proj;
+    info_out[5] = Rcpp::clone(outproj);
+
+    CPLFree(proj);
+  }
+
+  // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
+  if (sql[0] != "") {
+    poDS->ReleaseResultSet(poLayer);
+  }
+  GDALClose( poDS );
+  return info_out;
+}
+
 
 } // namespace gdalheaders
 #endif

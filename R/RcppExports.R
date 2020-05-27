@@ -21,15 +21,19 @@ feature_count_gdal_cpp <- function(dsn, layer, iterate) {
     .Call(`_dirigible_feature_count_gdal_cpp`, dsn, layer, iterate)
 }
 
-read_fields_gdal_cpp <- function(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name) {
-    .Call(`_dirigible_read_fields_gdal_cpp`, dsource, layer, sql, limit_n, skip_n, ex, fid_column_name)
+read_fields_gdal_cpp <- function(dsn, layer, sql, limit_n, skip_n, ex, fid_column_name) {
+    .Call(`_dirigible_read_fields_gdal_cpp`, dsn, layer, sql, limit_n, skip_n, ex, fid_column_name)
 }
 
-read_geometry_gdal_cpp <- function(dsource, layer, sql, what, textformat, limit_n, skip_n, ex) {
-    .Call(`_dirigible_read_geometry_gdal_cpp`, dsource, layer, sql, what, textformat, limit_n, skip_n, ex)
+read_geometry_gdal_cpp <- function(dsn, layer, sql, what, textformat, limit_n, skip_n, ex) {
+    .Call(`_dirigible_read_geometry_gdal_cpp`, dsn, layer, sql, what, textformat, limit_n, skip_n, ex)
 }
 
-read_names_gdal_cpp <- function(dsource, layer, sql, limit_n, skip_n, ex) {
-    .Call(`_dirigible_read_names_gdal_cpp`, dsource, layer, sql, limit_n, skip_n, ex)
+read_names_gdal_cpp <- function(dsn, layer, sql, limit_n, skip_n, ex) {
+    .Call(`_dirigible_read_names_gdal_cpp`, dsn, layer, sql, limit_n, skip_n, ex)
+}
+
+projection_info_gdal_cpp <- function(dsn, layer, sql) {
+    .Call(`_dirigible_projection_info_gdal_cpp`, dsn, layer, sql)
 }
 

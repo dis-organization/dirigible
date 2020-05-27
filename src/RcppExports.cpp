@@ -61,29 +61,29 @@ BEGIN_RCPP
 END_RCPP
 }
 // read_fields_gdal_cpp
-List read_fields_gdal_cpp(CharacterVector dsource, IntegerVector layer, CharacterVector sql, IntegerVector limit_n, IntegerVector skip_n, NumericVector ex, CharacterVector fid_column_name);
-RcppExport SEXP _dirigible_read_fields_gdal_cpp(SEXP dsourceSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP, SEXP fid_column_nameSEXP) {
+List read_fields_gdal_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql, IntegerVector limit_n, IntegerVector skip_n, NumericVector ex, CharacterVector fid_column_name);
+RcppExport SEXP _dirigible_read_fields_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP, SEXP fid_column_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type dsource(dsourceSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type limit_n(limit_nSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type skip_n(skip_nSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type fid_column_name(fid_column_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_fields_gdal_cpp(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name));
+    rcpp_result_gen = Rcpp::wrap(read_fields_gdal_cpp(dsn, layer, sql, limit_n, skip_n, ex, fid_column_name));
     return rcpp_result_gen;
 END_RCPP
 }
 // read_geometry_gdal_cpp
-List read_geometry_gdal_cpp(CharacterVector dsource, IntegerVector layer, CharacterVector sql, CharacterVector what, CharacterVector textformat, IntegerVector limit_n, IntegerVector skip_n, NumericVector ex);
-RcppExport SEXP _dirigible_read_geometry_gdal_cpp(SEXP dsourceSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP whatSEXP, SEXP textformatSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP) {
+List read_geometry_gdal_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql, CharacterVector what, CharacterVector textformat, IntegerVector limit_n, IntegerVector skip_n, NumericVector ex);
+RcppExport SEXP _dirigible_read_geometry_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP whatSEXP, SEXP textformatSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type dsource(dsourceSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type what(whatSEXP);
@@ -91,23 +91,36 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type limit_n(limit_nSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type skip_n(skip_nSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_geometry_gdal_cpp(dsource, layer, sql, what, textformat, limit_n, skip_n, ex));
+    rcpp_result_gen = Rcpp::wrap(read_geometry_gdal_cpp(dsn, layer, sql, what, textformat, limit_n, skip_n, ex));
     return rcpp_result_gen;
 END_RCPP
 }
 // read_names_gdal_cpp
-List read_names_gdal_cpp(CharacterVector dsource, IntegerVector layer, CharacterVector sql, IntegerVector limit_n, IntegerVector skip_n, NumericVector ex);
-RcppExport SEXP _dirigible_read_names_gdal_cpp(SEXP dsourceSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP) {
+List read_names_gdal_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql, IntegerVector limit_n, IntegerVector skip_n, NumericVector ex);
+RcppExport SEXP _dirigible_read_names_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP, SEXP exSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type dsource(dsourceSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type limit_n(limit_nSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type skip_n(skip_nSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_names_gdal_cpp(dsource, layer, sql, limit_n, skip_n, ex));
+    rcpp_result_gen = Rcpp::wrap(read_names_gdal_cpp(dsn, layer, sql, limit_n, skip_n, ex));
+    return rcpp_result_gen;
+END_RCPP
+}
+// projection_info_gdal_cpp
+List projection_info_gdal_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql);
+RcppExport SEXP _dirigible_projection_info_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    rcpp_result_gen = Rcpp::wrap(projection_info_gdal_cpp(dsn, layer, sql));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -121,6 +134,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_read_fields_gdal_cpp", (DL_FUNC) &_dirigible_read_fields_gdal_cpp, 7},
     {"_dirigible_read_geometry_gdal_cpp", (DL_FUNC) &_dirigible_read_geometry_gdal_cpp, 8},
     {"_dirigible_read_names_gdal_cpp", (DL_FUNC) &_dirigible_read_names_gdal_cpp, 6},
+    {"_dirigible_projection_info_gdal_cpp", (DL_FUNC) &_dirigible_projection_info_gdal_cpp, 3},
     {NULL, NULL, 0}
 };
 
