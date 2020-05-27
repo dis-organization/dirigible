@@ -23,6 +23,14 @@ LogicalVector cleanup_gdal_cpp() {
   return out;
 }
 // [[Rcpp::export]]
+CharacterVector version_gdal_cpp() {
+  return gdalheaders::gdal_version();
+}
+// [[Rcpp::export]]
+List drivers_list_gdal_cpp() {
+  return gdalheaders::gdal_list_drivers();
+}
+// [[Rcpp::export]]
 CharacterVector driver_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_driver(dsn);
 }

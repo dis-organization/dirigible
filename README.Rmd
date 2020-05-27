@@ -92,6 +92,11 @@ str(dirigible:::read_geometry_gdal_cpp(f1, layer = 0, sql = "",
                          textformat = "kml",
                          limit_n = 1, skip_n = 0, ex = 0))
 
+## sys
+dirigible:::version_gdal_cpp()
+str(dirigible:::drivers_list_gdal_cpp())
+
+
 ## white zone
 dirigible:::dirigible_unload_gdal()
 try(dirigible:::layer_names_gdal_cpp(f))

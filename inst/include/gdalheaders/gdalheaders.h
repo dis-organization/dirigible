@@ -24,6 +24,51 @@ inline void osr_cleanup() {
   OSRCleanup();
 }
 
+
+inline CharacterVector gdal_version()
+{
+  Rcpp::CharacterVector out(1);
+
+  out[0] = GDALVersionInfo("--version");
+  return out;
+}
+
+
+inline List gdal_list_drivers()
+{
+  GDALAllRegister();
+
+  int n = GetGDALDriverManager()->GetDriverCount();
+
+  Rcpp::CharacterVector sname(n);
+  Rcpp::CharacterVector lname(n);
+  Rcpp::LogicalVector isvector(n);
+  Rcpp::LogicalVector israster(n);
+  Rcpp::LogicalVector iscopy(n);
+  Rcpp::LogicalVector iscreate(n);
+  Rcpp::LogicalVector isvirt(n);
+  for (int idriver = 0; idriver < n; idriver++) {
+    GDALDriver *dr = GetGDALDriverManager()->GetDriver(idriver);
+    sname(idriver) = GDALGetDriverShortName(dr);
+    lname(idriver) = GDALGetDriverLongName(dr);
+    isvector(idriver) = (dr->GetMetadataItem(GDAL_DCAP_VECTOR) != NULL);
+    israster(idriver) = (dr->GetMetadataItem(GDAL_DCAP_RASTER) != NULL);
+    iscopy(idriver) = (dr->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL);
+    iscreate(idriver) = (dr->GetMetadataItem(GDAL_DCAP_CREATE) != NULL);
+    isvirt(idriver) = (dr->GetMetadataItem(GDAL_DCAP_VIRTUALIO) != NULL);
+
+
+  }
+  Rcpp::List out = Rcpp::List::create(Rcpp::Named("driver") = sname,
+                                      Rcpp::Named("name") = lname,
+                                      Rcpp::Named("vector") = isvector,
+                                      Rcpp::Named("raster") = israster,
+                                      Rcpp::Named("create") = iscreate,
+                                      Rcpp::Named("copy") = iscopy,
+                                      Rcpp::Named("virtual") = isvirt);
+  return out;
+}
+
 // allocate_fields_list: stolen from allocate_out_list
 // allocate_out_list: this is the non-geometry part of sf allocate_out_list by Edzer Pebsema
 // https://github.com/r-spatial/sf/blob/cc7fba3c5a34ec1c545a4ab82369f33f47c3745f/src/gdal_read.cpp#L12-L65
@@ -96,8 +141,8 @@ inline Rcpp::List allocate_fields_list(OGRFeatureDefn *poFDefn, int n_features, 
 }
 
 
-// [[Rcpp::export]]
-List gdal_read_fields(CharacterVector dsn,
+
+inline List gdal_read_fields(CharacterVector dsn,
                       IntegerVector layer,
                       CharacterVector sql,
                       IntegerVector limit_n,
@@ -330,7 +375,7 @@ inline CharacterVector gdal_layer_names(CharacterVector dsn,
 
 
 
-// [[Rcpp::export]]
+
 inline List gdal_read_geometry(CharacterVector dsn,
                                      IntegerVector layer,
                                      CharacterVector sql,
@@ -549,7 +594,7 @@ inline List gdal_read_geometry(CharacterVector dsn,
 }
 
 
-// [[Rcpp::export]]
+
 inline List gdal_read_names(CharacterVector dsn,
                            IntegerVector layer,
                            CharacterVector sql,
@@ -674,8 +719,8 @@ inline List gdal_read_names(CharacterVector dsn,
 
 
 
-// [[Rcpp::export]]
-List gdal_projection_info(CharacterVector dsn,
+
+inline List gdal_projection_info(CharacterVector dsn,
                                 IntegerVector layer,
                                 CharacterVector sql)
 {

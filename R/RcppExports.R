@@ -9,6 +9,14 @@ cleanup_gdal_cpp <- function() {
     .Call(`_dirigible_cleanup_gdal_cpp`)
 }
 
+version_gdal_cpp <- function() {
+    .Call(`_dirigible_version_gdal_cpp`)
+}
+
+drivers_list_gdal_cpp <- function() {
+    .Call(`_dirigible_drivers_list_gdal_cpp`)
+}
+
 driver_gdal_cpp <- function(dsn) {
     .Call(`_dirigible_driver_gdal_cpp`, dsn)
 }

@@ -25,6 +25,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// version_gdal_cpp
+CharacterVector version_gdal_cpp();
+RcppExport SEXP _dirigible_version_gdal_cpp() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(version_gdal_cpp());
+    return rcpp_result_gen;
+END_RCPP
+}
+// drivers_list_gdal_cpp
+List drivers_list_gdal_cpp();
+RcppExport SEXP _dirigible_drivers_list_gdal_cpp() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(drivers_list_gdal_cpp());
+    return rcpp_result_gen;
+END_RCPP
+}
 // driver_gdal_cpp
 CharacterVector driver_gdal_cpp(CharacterVector dsn);
 RcppExport SEXP _dirigible_driver_gdal_cpp(SEXP dsnSEXP) {
@@ -128,6 +148,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
     {"_dirigible_cleanup_gdal_cpp", (DL_FUNC) &_dirigible_cleanup_gdal_cpp, 0},
+    {"_dirigible_version_gdal_cpp", (DL_FUNC) &_dirigible_version_gdal_cpp, 0},
+    {"_dirigible_drivers_list_gdal_cpp", (DL_FUNC) &_dirigible_drivers_list_gdal_cpp, 0},
     {"_dirigible_driver_gdal_cpp", (DL_FUNC) &_dirigible_driver_gdal_cpp, 1},
     {"_dirigible_layer_names_gdal_cpp", (DL_FUNC) &_dirigible_layer_names_gdal_cpp, 1},
     {"_dirigible_feature_count_gdal_cpp", (DL_FUNC) &_dirigible_feature_count_gdal_cpp, 3},
