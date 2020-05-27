@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-LogicalVector register_gdal() {
+LogicalVector register_gdal_cpp() {
   gdalheaders::gdal_register_all();
   gdalheaders::ogr_register_all();
 
@@ -14,7 +14,7 @@ LogicalVector register_gdal() {
 }
 
 // [[Rcpp::export]]
-LogicalVector cleanup_gdal() {
+LogicalVector cleanup_gdal_cpp() {
   gdalheaders::ogr_cleanup_all();
   gdalheaders::osr_cleanup();
 
@@ -23,27 +23,51 @@ LogicalVector cleanup_gdal() {
   return out;
 }
 // [[Rcpp::export]]
-CharacterVector driver_gdal(CharacterVector dsn) {
+CharacterVector driver_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_driver(dsn);
 }
 // [[Rcpp::export]]
-CharacterVector layer_names_gdal(CharacterVector dsn) {
+CharacterVector layer_names_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_layer_names(dsn);
 }
 // [[Rcpp::export]]
-DoubleVector feature_count_gdal(CharacterVector dsn,  // double, could be a lot of features
+DoubleVector feature_count_gdal_cpp(CharacterVector dsn,  // double, could be a lot of features
                      IntegerVector layer,
                      LogicalVector iterate) {
  return gdalheaders::gdal_feature_count(dsn, layer, iterate);
 }
 
 // [[Rcpp::export]]
-List read_fields_gdal(Rcpp::CharacterVector dsource,
-                      Rcpp::IntegerVector layer,
-                      Rcpp::CharacterVector sql,
-                      Rcpp::IntegerVector limit_n,
-                      Rcpp::IntegerVector skip_n,
-                      Rcpp::NumericVector ex,
-                      Rcpp::CharacterVector fid_column_name) {
+List read_fields_gdal_cpp(CharacterVector dsource,
+                      IntegerVector layer,
+                      CharacterVector sql,
+                      IntegerVector limit_n,
+                      IntegerVector skip_n,
+                      NumericVector ex,
+                      CharacterVector fid_column_name) {
   return gdalheaders::gdal_read_fields(dsource, layer, sql, limit_n, skip_n, ex, fid_column_name);
+}
+
+// [[Rcpp::export]]
+List read_geometry_gdal_cpp(CharacterVector dsource,
+                         IntegerVector layer,
+                         CharacterVector sql,
+                         CharacterVector what,
+                         CharacterVector textformat,
+                         IntegerVector limit_n,
+                         IntegerVector skip_n,
+                         NumericVector ex ) {
+  return gdalheaders::gdal_read_geometry(dsource, layer, sql, what, textformat, limit_n, skip_n, ex);
+}
+
+
+
+// [[Rcpp::export]]
+List read_names_gdal_cpp(CharacterVector dsource,
+                        IntegerVector layer,
+                        CharacterVector sql,
+                        IntegerVector limit_n,
+                        IntegerVector skip_n,
+                        NumericVector ex ) {
+  return gdalheaders::gdal_read_names(dsource, layer, sql, limit_n, skip_n, ex);
 }

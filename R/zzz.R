@@ -27,11 +27,11 @@ dirigible_load_gdal <- function() {
     gdl = system.file("gdal", package = "dirigible")[1]
     Sys.setenv("GDAL_DATA" = gdl)
   }
-  register_gdal();
+  register_gdal_cpp();
 }
 # todo
 dirigible_unload_gdal <- function() {
-  cleanup_gdal();
+  cleanup_gdal_cpp();
   if (file.exists(system.file("proj/nad.lst", package = "dirigible")[1L])) {
     #if (! CPL_set_data_dir(system.file("proj", package = "sf")[1])) # set back:
     #  Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))

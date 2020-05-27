@@ -22,19 +22,19 @@ library(dirigible)
 f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
 
 ## name of driver in use
-dirigible:::driver_gdal(f)
+dirigible:::driver_gdal_cpp(f)
 #> [1] "MapInfo File"
 
 ## layer feature count
-dirigible:::feature_count_gdal(f, layer = 0, iterate = FALSE)
+dirigible:::feature_count_gdal_cpp(f, layer = 0, iterate = FALSE)
 #> [1] 58
 
 ## vector layer names
-dirigible:::layer_names_gdal(f)
+dirigible:::layer_names_gdal_cpp(f)
 #> [1] "list_locality_postcode_meander_valley"
 
 ## read fields
-as.data.frame(dirigible:::read_fields_gdal(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
+as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
 #>   LOCAL_ID     NAME POSTCODE PLAN_REF   GAZ_DATE NOM_REG_NO
 #> 1   100422 Caveside     7304  CPR5322 1970-01-01       947L
 #>                                      UFI          CREATED_ON
@@ -42,15 +42,67 @@ as.data.frame(dirigible:::read_fields_gdal(f, layer = 0, sql = "", limit_n = 1, 
 #>                                LIST_GUID SHAPE_AREA SHAPE_LEN
 #> 1 {839edd46-01a7-4a45-9d97-499962fa952b}      -9999  39785.88
  
+## read names
 
+unlist(dirigible:::read_names_gdal_cpp(f, 
+                            layer = 0, sql = "", 
+                            limit_n = 10, 
+                            skip_n = 0, ex = 0))
+#>  [1]  1  2  3  4  5  6  7  8  9 10
+osm <- system.file("extdata/osm/osm-ways.osm", package = "vapour", mustWork = TRUE)
+unlist(dirigible:::read_names_gdal_cpp(osm, 
+                            layer = 1,   ## layer 1 is 'lines'
+                            sql = "", 
+                            limit_n = 0, 
+                            skip_n = 0, ex = 0))
+#> [1] 100 101 102 103 104
+
+## read geometry
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "geometry",
+                         textformat = "json",
+                         limit_n = 1, skip_n = 0, ex = 0))
+#> List of 1
+#>  $ : raw [1:19485] 01 03 00 00 ...
+
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "json",
+                         limit_n = 1, skip_n = 0, ex = 0))
+#> List of 1
+#>  $ : chr "{ \"type\": \"Polygon\", \"coordinates\": [ [ [ 454430.22, 5396950.82 ], [ 454430.86, 5396948.43 ], [ 454432.44"| __truncated__
+
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "wkt",
+                         limit_n = 1, skip_n = 0, ex = 0))
+#> List of 1
+#>  $ : chr "POLYGON ((454430.22 5396950.82,454430.86 5396948.43,454432.44 5396943.6,454434.6 5396937.44,454448.18 5396910.5"| __truncated__
+
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "gml",
+                         limit_n = 1, skip_n = 0, ex = 0))
+#> List of 1
+#>  $ : chr "<gml:Polygon><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>454430.22,5396950.82 454430.86,5396948.43 45"| __truncated__
+
+## got to be longlat for kml (just fwiw)
+f1 <- system.file("gpkg/nc.gpkg", package = "sf")
+
+str(dirigible:::read_geometry_gdal_cpp(f1, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "kml",
+                         limit_n = 1, skip_n = 0, ex = 0))
+#> List of 1
+#>  $ : chr "<MultiGeometry><Polygon><outerBoundaryIs><LinearRing><coordinates>-81.4727554321289,36.2343559265137 -81.540840"| __truncated__
 
 ## white zone
 dirigible:::dirigible_unload_gdal()
-try(dirigible:::layer_names_gdal(f))
-#> Error in dirigible:::layer_names_gdal(f) : Open failed.
+try(dirigible:::layer_names_gdal_cpp(f))
+#> Error in dirigible:::layer_names_gdal_cpp(f) : Open failed.
 dirigible:::dirigible_load_gdal()
 #> [1] TRUE
-dirigible:::layer_names_gdal(f)
+dirigible:::layer_names_gdal_cpp(f)
 #> [1] "list_locality_postcode_meander_valley"
 ```
 

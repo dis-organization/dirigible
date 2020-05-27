@@ -36,24 +36,64 @@ library(dirigible)
 f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
 
 ## name of driver in use
-dirigible:::driver_gdal(f)
+dirigible:::driver_gdal_cpp(f)
 
 ## layer feature count
-dirigible:::feature_count_gdal(f, layer = 0, iterate = FALSE)
+dirigible:::feature_count_gdal_cpp(f, layer = 0, iterate = FALSE)
 
 ## vector layer names
-dirigible:::layer_names_gdal(f)
+dirigible:::layer_names_gdal_cpp(f)
 
 ## read fields
-as.data.frame(dirigible:::read_fields_gdal(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
+as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
  
+## read names
 
+unlist(dirigible:::read_names_gdal_cpp(f, 
+                            layer = 0, sql = "", 
+                            limit_n = 10, 
+                            skip_n = 0, ex = 0))
+osm <- system.file("extdata/osm/osm-ways.osm", package = "vapour", mustWork = TRUE)
+unlist(dirigible:::read_names_gdal_cpp(osm, 
+                            layer = 1,   ## layer 1 is 'lines'
+                            sql = "", 
+                            limit_n = 0, 
+                            skip_n = 0, ex = 0))
+
+## read geometry
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "geometry",
+                         textformat = "json",
+                         limit_n = 1, skip_n = 0, ex = 0))
+
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "json",
+                         limit_n = 1, skip_n = 0, ex = 0))
+
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "wkt",
+                         limit_n = 1, skip_n = 0, ex = 0))
+
+str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "gml",
+                         limit_n = 1, skip_n = 0, ex = 0))
+
+## got to be longlat for kml (just fwiw)
+f1 <- system.file("gpkg/nc.gpkg", package = "sf")
+
+str(dirigible:::read_geometry_gdal_cpp(f1, layer = 0, sql = "",
+                         what = "text",
+                         textformat = "kml",
+                         limit_n = 1, skip_n = 0, ex = 0))
 
 ## white zone
 dirigible:::dirigible_unload_gdal()
-try(dirigible:::layer_names_gdal(f))
+try(dirigible:::layer_names_gdal_cpp(f))
 dirigible:::dirigible_load_gdal()
-dirigible:::layer_names_gdal(f)
+dirigible:::layer_names_gdal_cpp(f)
 
 ```
 
