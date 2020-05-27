@@ -5,6 +5,8 @@
 //#include "ogr_api.h"
 #include "gdal_priv.h"
 #include "CollectorList.h"
+// #include "ogr_spatialref.h" // for OGRSpatialReference
+// #include "cpl_conv.h" // for CPLFree()
 
 namespace gdalheaders {
 using namespace Rcpp;
@@ -718,7 +720,16 @@ inline List gdal_read_names(CharacterVector dsn,
 }
 
 
+inline CharacterVector gdal_proj_to_wkt(CharacterVector proj_str) {
+  OGRSpatialReference oSRS;
+  char *pszWKT = NULL;
+  oSRS.importFromProj4(proj_str[0]);
+  oSRS.exportToWkt(&pszWKT);
+  CharacterVector out =  Rcpp::CharacterVector::create(pszWKT);
+  CPLFree(pszWKT);
 
+  return out;
+}
 
 inline List gdal_projection_info(CharacterVector dsn,
                                 IntegerVector layer,

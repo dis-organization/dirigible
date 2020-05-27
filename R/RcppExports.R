@@ -17,6 +17,10 @@ drivers_list_gdal_cpp <- function() {
     .Call(`_dirigible_drivers_list_gdal_cpp`)
 }
 
+proj_to_wkt_gdal_cpp <- function(proj4string) {
+    .Call(`_dirigible_proj_to_wkt_gdal_cpp`, proj4string)
+}
+
 driver_gdal_cpp <- function(dsn) {
     .Call(`_dirigible_driver_gdal_cpp`, dsn)
 }

@@ -96,6 +96,7 @@ str(dirigible:::read_geometry_gdal_cpp(f1, layer = 0, sql = "",
 dirigible:::version_gdal_cpp()
 str(dirigible:::drivers_list_gdal_cpp())
 
+dirigible:::proj_to_wkt_gdal_cpp("+proj=laea +datum=WGS84")
 
 ## white zone
 dirigible:::dirigible_unload_gdal()

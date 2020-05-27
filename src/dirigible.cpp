@@ -31,6 +31,10 @@ List drivers_list_gdal_cpp() {
   return gdalheaders::gdal_list_drivers();
 }
 // [[Rcpp::export]]
+CharacterVector proj_to_wkt_gdal_cpp(CharacterVector proj4string) {
+  return gdalheaders::gdal_proj_to_wkt(proj4string);
+}
+// [[Rcpp::export]]
 CharacterVector driver_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_driver(dsn);
 }

@@ -117,6 +117,8 @@ str(dirigible:::drivers_list_gdal_cpp())
 #>  $ copy   : logi [1:226] TRUE FALSE TRUE TRUE FALSE FALSE ...
 #>  $ virtual: logi [1:226] TRUE FALSE TRUE TRUE TRUE TRUE ...
 
+dirigible:::proj_to_wkt_gdal_cpp("+proj=laea +datum=WGS84")
+#> [1] "PROJCS[\"unknown\",GEOGCS[\"unknown\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]]],PROJECTION[\"Lambert_Azimuthal_Equal_Area\"],PARAMETER[\"latitude_of_center\",0],PARAMETER[\"longitude_of_center\",0],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]]"
 
 ## white zone
 dirigible:::dirigible_unload_gdal()
