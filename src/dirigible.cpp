@@ -101,3 +101,9 @@ CharacterVector report_fields_gdal_cpp(CharacterVector dsn,
 CharacterVector vsi_list_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_vsi_list(dsn);
 }
+
+// [[Rcpp::export]]
+CharacterVector sds_list_gdal_cpp(CharacterVector dsn) {
+  return gdalheaders::gdal_sds_list(dsn[0]);
+}
+

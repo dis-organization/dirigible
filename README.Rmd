@@ -59,6 +59,10 @@ as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n =
 u <- "/vsizip//vsicurl/http://dapds00.nci.org.au/thredds/fileServer/rr2/national_geophysical_compilations/http/radmap_v3_2015_filtered_dose/radmap_v3_2015_filtered_dose.ers.zip"
 (paths <- dirigible:::vsi_list_gdal_cpp(u))
 
+## sds
+rf <- system.file("extdata/gdal/sds.nc", package = "vapour", mustWork = TRUE)
+dirigible:::sds_list_gdal_cpp(rf)
+
 
 ## read names
 unlist(dirigible:::read_names_gdal_cpp(f, 

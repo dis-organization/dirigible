@@ -63,6 +63,14 @@ u <- "/vsizip//vsicurl/http://dapds00.nci.org.au/thredds/fileServer/rr2/national
 #> [1] "radmap_v3_2015_filtered_dose"     "radmap_v3_2015_filtered_dose.ers"
 #> [3] "radmap_v3_2015_filtered_dose.isi" "radmap_v3_2015_filtered_dose.txt"
 
+## sds
+rf <- system.file("extdata/gdal/sds.nc", package = "vapour", mustWork = TRUE)
+dirigible:::sds_list_gdal_cpp(rf)
+#> [1] "SUBDATASET_1_NAME=NETCDF:\"/perm_storage/home/mdsumner/R/x86_64-pc-linux-gnu-library/4.0/vapour/extdata/gdal/sds.nc\":vv" 
+#> [2] "SUBDATASET_1_DESC=[61x87] vv (64-bit floating-point)"                                                                     
+#> [3] "SUBDATASET_2_NAME=NETCDF:\"/perm_storage/home/mdsumner/R/x86_64-pc-linux-gnu-library/4.0/vapour/extdata/gdal/sds.nc\":vv2"
+#> [4] "SUBDATASET_2_DESC=[61x87] vv2 (64-bit floating-point)"
+
 
 ## read names
 unlist(dirigible:::read_names_gdal_cpp(f, 

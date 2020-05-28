@@ -57,3 +57,7 @@ vsi_list_gdal_cpp <- function(dsn) {
     .Call(`_dirigible_vsi_list_gdal_cpp`, dsn)
 }
 
+sds_list_gdal_cpp <- function(dsn) {
+    .Call(`_dirigible_sds_list_gdal_cpp`, dsn)
+}
+
