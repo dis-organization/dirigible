@@ -189,6 +189,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// warp_in_memory_gdal_cpp
+List warp_in_memory_gdal_cpp(CharacterVector dsn, CharacterVector source_WKT, CharacterVector target_WKT, NumericVector target_geotransform, IntegerVector target_dim, IntegerVector band);
+RcppExport SEXP _dirigible_warp_in_memory_gdal_cpp(SEXP dsnSEXP, SEXP source_WKTSEXP, SEXP target_WKTSEXP, SEXP target_geotransformSEXP, SEXP target_dimSEXP, SEXP bandSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type source_WKT(source_WKTSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type target_WKT(target_WKTSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type target_geotransform(target_geotransformSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type target_dim(target_dimSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type band(bandSEXP);
+    rcpp_result_gen = Rcpp::wrap(warp_in_memory_gdal_cpp(dsn, source_WKT, target_WKT, target_geotransform, target_dim, band));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -206,6 +222,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_report_fields_gdal_cpp", (DL_FUNC) &_dirigible_report_fields_gdal_cpp, 3},
     {"_dirigible_vsi_list_gdal_cpp", (DL_FUNC) &_dirigible_vsi_list_gdal_cpp, 1},
     {"_dirigible_sds_list_gdal_cpp", (DL_FUNC) &_dirigible_sds_list_gdal_cpp, 1},
+    {"_dirigible_warp_in_memory_gdal_cpp", (DL_FUNC) &_dirigible_warp_in_memory_gdal_cpp, 6},
     {NULL, NULL, 0}
 };
 

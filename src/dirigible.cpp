@@ -1,5 +1,7 @@
 #include <Rcpp.h>
 #include "gdalheaders/gdalheaders.h"
+#include "gdalwarpmem/gdalwarpmem.h"
+
 using namespace Rcpp;
 
 
@@ -107,3 +109,17 @@ CharacterVector sds_list_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_sds_list(dsn[0]);
 }
 
+// [[Rcpp::export]]
+List warp_in_memory_gdal_cpp(CharacterVector dsn,
+                             CharacterVector source_WKT,
+                             CharacterVector target_WKT,
+                             NumericVector target_geotransform,
+                             IntegerVector target_dim,
+                             IntegerVector band) {
+return gdalwarpmem::gdal_warp_in_memory(dsn,
+                    source_WKT,
+                    target_WKT,
+                    target_geotransform,
+                    target_dim,
+                    band);
+}

@@ -158,6 +158,43 @@ dirigible:::layer_names_gdal_cpp(f)
 #> [1] "list_locality_postcode_meander_valley"
 ```
 
+### Warping in memory
+
+Very WIP, needs a lot of thought around UX.
+
+``` r
+tas_wkt <- "PROJCRS[\"unknown\",\n    BASEGEOGCRS[\"unknown\",\n        DATUM[\"World Geodetic System 1984\",\n            ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n                LENGTHUNIT[\"metre\",1]],\n            ID[\"EPSG\",6326]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8901]]],\n    CONVERSION[\"unknown\",\n        METHOD[\"Lambert Azimuthal Equal Area\",\n            ID[\"EPSG\",9820]],\n        PARAMETER[\"Latitude of natural origin\",-42,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",147,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"False easting\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"
+prj <- "+proj=laea +lon_0=147 +lat_0=-42 +datum=WGS84"
+
+
+f <- 1/10
+dm <- as.integer(c(186, 298) * f)
+gt <- c(-637239.4, 5030.0/f, 0.0, 261208.7, 0.0, -7760.0/f)
+
+gt_dim_2ex <- function(x, dim) {
+  xx <- c(x[1], x[1] + dim[1] * x[2]) - x[2]/2
+  yy <- c(x[4] + dim[2] * x[6], x[4]) - x[6]/2
+  raster::extent(c(xx, yy))
+}
+
+ex <- gt_dim_2ex(gt, dm)
+f <- system.file("extdata", "sst.tif", package = "vapour")
+vals <- dirigible:::warp_in_memory_gdal_cpp(f,source_WKT = "", 
+                                            target_WKT = tas_wkt,
+                                            target_geotransform = gt,
+                             target_dim = dm, band = 1)
+
+v <- vals[[1]]
+v[v < 250] <- NA
+library(raster)
+#> Loading required package: sp
+data("wrld_simpl", package = "maptools")
+plot(setValues(raster(ex, nrows = dm[2], ncols = dm[1]), v))
+plot(spTransform(subset(wrld_simpl, NAME == "Australia"), prj), add = TRUE)
+```
+
+<img src="man/figures/README-warper-1.png" width="100%" />
+
 -----
 
 ## Code of Conduct
