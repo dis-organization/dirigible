@@ -79,15 +79,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // feature_count_gdal_cpp
-DoubleVector feature_count_gdal_cpp(CharacterVector dsn, IntegerVector layer, LogicalVector iterate);
-RcppExport SEXP _dirigible_feature_count_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP iterateSEXP) {
+DoubleVector feature_count_gdal_cpp(CharacterVector dsn, IntegerVector layer);
+RcppExport SEXP _dirigible_feature_count_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
-    Rcpp::traits::input_parameter< LogicalVector >::type iterate(iterateSEXP);
-    rcpp_result_gen = Rcpp::wrap(feature_count_gdal_cpp(dsn, layer, iterate));
+    rcpp_result_gen = Rcpp::wrap(feature_count_gdal_cpp(dsn, layer));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -164,7 +163,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_proj_to_wkt_gdal_cpp", (DL_FUNC) &_dirigible_proj_to_wkt_gdal_cpp, 1},
     {"_dirigible_driver_gdal_cpp", (DL_FUNC) &_dirigible_driver_gdal_cpp, 1},
     {"_dirigible_layer_names_gdal_cpp", (DL_FUNC) &_dirigible_layer_names_gdal_cpp, 1},
-    {"_dirigible_feature_count_gdal_cpp", (DL_FUNC) &_dirigible_feature_count_gdal_cpp, 3},
+    {"_dirigible_feature_count_gdal_cpp", (DL_FUNC) &_dirigible_feature_count_gdal_cpp, 2},
     {"_dirigible_read_fields_gdal_cpp", (DL_FUNC) &_dirigible_read_fields_gdal_cpp, 7},
     {"_dirigible_read_geometry_gdal_cpp", (DL_FUNC) &_dirigible_read_geometry_gdal_cpp, 8},
     {"_dirigible_read_names_gdal_cpp", (DL_FUNC) &_dirigible_read_names_gdal_cpp, 6},

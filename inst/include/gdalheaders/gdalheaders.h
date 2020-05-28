@@ -294,8 +294,7 @@ inline List gdal_read_fields(CharacterVector dsn,
 
 
 inline DoubleVector gdal_feature_count(CharacterVector dsn,
-                                       IntegerVector layer,
-                                       LogicalVector iterate) {
+                                       IntegerVector layer) {
   GDALDataset       *poDS;
   poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
@@ -312,16 +311,7 @@ inline DoubleVector gdal_feature_count(CharacterVector dsn,
   aLayer =  poDS->GetLayer(layer[0]);
   OGRFeature *aFeature;
   aLayer->ResetReading();
-  double nFeature = (double)aLayer->GetFeatureCount();
-  if (iterate) {
-    nFeature = 0;
-    while( (aFeature = aLayer->GetNextFeature()) != NULL )
-    {
-      nFeature++;
-      OGRFeature::DestroyFeature(aFeature);
-    }
-
-  }
+  double nFeature = (double)aLayer->GetFeatureCount(TRUE);
   GDALClose( poDS );
 
   DoubleVector out(1);

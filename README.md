@@ -27,7 +27,7 @@ dirigible:::driver_gdal_cpp(f)
 #> [1] "MapInfo File"
 
 ## layer feature count
-dirigible:::feature_count_gdal_cpp(f, layer = 0, iterate = FALSE)
+dirigible:::feature_count_gdal_cpp(f, layer = 0)
 #> [1] 58
 
 ## vector layer names

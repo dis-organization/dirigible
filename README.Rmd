@@ -39,7 +39,7 @@ f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", packag
 dirigible:::driver_gdal_cpp(f)
 
 ## layer feature count
-dirigible:::feature_count_gdal_cpp(f, layer = 0, iterate = FALSE)
+dirigible:::feature_count_gdal_cpp(f, layer = 0)
 
 ## vector layer names
 dirigible:::layer_names_gdal_cpp(f)
