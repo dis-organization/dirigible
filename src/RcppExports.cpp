@@ -167,6 +167,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vsi_list_gdal_cpp
+CharacterVector vsi_list_gdal_cpp(CharacterVector dsn);
+RcppExport SEXP _dirigible_vsi_list_gdal_cpp(SEXP dsnSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    rcpp_result_gen = Rcpp::wrap(vsi_list_gdal_cpp(dsn));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -182,6 +193,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_read_names_gdal_cpp", (DL_FUNC) &_dirigible_read_names_gdal_cpp, 6},
     {"_dirigible_projection_info_gdal_cpp", (DL_FUNC) &_dirigible_projection_info_gdal_cpp, 3},
     {"_dirigible_report_fields_gdal_cpp", (DL_FUNC) &_dirigible_report_fields_gdal_cpp, 3},
+    {"_dirigible_vsi_list_gdal_cpp", (DL_FUNC) &_dirigible_vsi_list_gdal_cpp, 1},
     {NULL, NULL, 0}
 };
 

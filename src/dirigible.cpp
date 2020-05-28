@@ -96,3 +96,8 @@ CharacterVector report_fields_gdal_cpp(CharacterVector dsn,
                               CharacterVector sql) {
   return gdalheaders::gdal_report_fields(dsn, layer, sql);
 }
+
+// [[Rcpp::export]]
+CharacterVector vsi_list_gdal_cpp(CharacterVector dsn) {
+  return gdalheaders::gdal_vsi_list(dsn);
+}

@@ -57,8 +57,14 @@ as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n =
 #>                                LIST_GUID SHAPE_AREA SHAPE_LEN
 #> 1 {839edd46-01a7-4a45-9d97-499962fa952b}      -9999  39785.88
  
-## read names
+## VSI list
+u <- "/vsizip//vsicurl/http://dapds00.nci.org.au/thredds/fileServer/rr2/national_geophysical_compilations/http/radmap_v3_2015_filtered_dose/radmap_v3_2015_filtered_dose.ers.zip"
+(paths <- dirigible:::vsi_list_gdal_cpp(u))
+#> [1] "radmap_v3_2015_filtered_dose"     "radmap_v3_2015_filtered_dose.ers"
+#> [3] "radmap_v3_2015_filtered_dose.isi" "radmap_v3_2015_filtered_dose.txt"
 
+
+## read names
 unlist(dirigible:::read_names_gdal_cpp(f, 
                             layer = 0, sql = "", 
                             limit_n = 10, 

@@ -53,3 +53,7 @@ report_fields_gdal_cpp <- function(dsn, layer, sql) {
     .Call(`_dirigible_report_fields_gdal_cpp`, dsn, layer, sql)
 }
 
+vsi_list_gdal_cpp <- function(dsn) {
+    .Call(`_dirigible_vsi_list_gdal_cpp`, dsn)
+}
+

@@ -55,8 +55,12 @@ dirigible:::report_fields_gdal_cpp(f, 0,
 ## read fields
 as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
  
-## read names
+## VSI list
+u <- "/vsizip//vsicurl/http://dapds00.nci.org.au/thredds/fileServer/rr2/national_geophysical_compilations/http/radmap_v3_2015_filtered_dose/radmap_v3_2015_filtered_dose.ers.zip"
+(paths <- dirigible:::vsi_list_gdal_cpp(u))
 
+
+## read names
 unlist(dirigible:::read_names_gdal_cpp(f, 
                             layer = 0, sql = "", 
                             limit_n = 10, 
