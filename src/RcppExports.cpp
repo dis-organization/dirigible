@@ -154,6 +154,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// report_fields_gdal_cpp
+CharacterVector report_fields_gdal_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql);
+RcppExport SEXP _dirigible_report_fields_gdal_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    rcpp_result_gen = Rcpp::wrap(report_fields_gdal_cpp(dsn, layer, sql));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -168,6 +181,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_read_geometry_gdal_cpp", (DL_FUNC) &_dirigible_read_geometry_gdal_cpp, 8},
     {"_dirigible_read_names_gdal_cpp", (DL_FUNC) &_dirigible_read_names_gdal_cpp, 6},
     {"_dirigible_projection_info_gdal_cpp", (DL_FUNC) &_dirigible_projection_info_gdal_cpp, 3},
+    {"_dirigible_report_fields_gdal_cpp", (DL_FUNC) &_dirigible_report_fields_gdal_cpp, 3},
     {NULL, NULL, 0}
 };
 

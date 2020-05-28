@@ -89,3 +89,10 @@ List projection_info_gdal_cpp(CharacterVector dsn,
                          CharacterVector sql) {
   return gdalheaders::gdal_projection_info(dsn, layer, sql);
 }
+
+// [[Rcpp::export]]
+CharacterVector report_fields_gdal_cpp(CharacterVector dsn,
+                              IntegerVector layer,
+                              CharacterVector sql) {
+  return gdalheaders::gdal_report_fields(dsn, layer, sql);
+}

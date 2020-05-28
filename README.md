@@ -34,6 +34,20 @@ dirigible:::feature_count_gdal_cpp(f, layer = 0)
 dirigible:::layer_names_gdal_cpp(f)
 #> [1] "list_locality_postcode_meander_valley"
 
+## report fields
+dirigible:::report_fields_gdal_cpp(f, 0, sql = "")
+#>     LOCAL_ID         NAME     POSTCODE     PLAN_REF     GAZ_DATE   NOM_REG_NO 
+#>    "OFTReal"  "OFTString" "OFTInteger"  "OFTString"    "OFTDate"  "OFTString" 
+#>          UFI   CREATED_ON    LIST_GUID   SHAPE_AREA    SHAPE_LEN 
+#>  "OFTString"  "OFTString"  "OFTString"    "OFTReal"    "OFTReal"
+
+## report fields
+dirigible:::report_fields_gdal_cpp(f, 0, 
+                sql = "SELECT FID, NAME FROM list_locality_postcode_meander_valley")
+#>          FID         NAME 
+#> "OFTInteger"  "OFTString"
+
+
 ## read fields
 as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
 #>   LOCAL_ID     NAME POSTCODE PLAN_REF   GAZ_DATE NOM_REG_NO

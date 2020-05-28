@@ -44,6 +44,14 @@ dirigible:::feature_count_gdal_cpp(f, layer = 0)
 ## vector layer names
 dirigible:::layer_names_gdal_cpp(f)
 
+## report fields
+dirigible:::report_fields_gdal_cpp(f, 0, sql = "")
+
+## report fields
+dirigible:::report_fields_gdal_cpp(f, 0, 
+                sql = "SELECT FID, NAME FROM list_locality_postcode_meander_valley")
+
+
 ## read fields
 as.data.frame(dirigible:::read_fields_gdal_cpp(f, layer = 0, sql = "", limit_n = 1, skip_n = 0, ex = 0, fid_column_name = character(0)))
  

@@ -49,3 +49,7 @@ projection_info_gdal_cpp <- function(dsn, layer, sql) {
     .Call(`_dirigible_projection_info_gdal_cpp`, dsn, layer, sql)
 }
 
+report_fields_gdal_cpp <- function(dsn, layer, sql) {
+    .Call(`_dirigible_report_fields_gdal_cpp`, dsn, layer, sql)
+}
+
