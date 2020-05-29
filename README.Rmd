@@ -60,8 +60,8 @@ u <- "/vsizip//vsicurl/http://dapds00.nci.org.au/thredds/fileServer/rr2/national
 (paths <- dirigible:::vsi_list_gdal_cpp(u))
 
 ## sds
-rf <- system.file("extdata/gdal/sds.nc", package = "vapour", mustWork = TRUE)
-dirigible:::sds_list_gdal_cpp(rf)
+sdsfile <- system.file("extdata/gdal/sds.nc", package = "vapour", mustWork = TRUE)
+dirigible:::sds_list_gdal_cpp(sdsfile)
 
 
 ## read names
@@ -79,7 +79,19 @@ unlist(dirigible:::read_names_gdal_cpp(osm,
 ## read proj info
 names(dirigible:::projection_info_gdal_cpp(f, layer = 0, sql = ""))
 
-## read geometry
+## read gcp
+gcpfile <- system.file("extdata/gcps/volcano_gcp.tif", package = "vapour", mustWork = TRUE)
+dirigible:::raster_gcp_gdal_cpp(gcpfile)
+
+## raster info
+dirigible:::raster_info_gdal_cpp(gcpfile, FALSE)
+dirigible:::raster_info_gdal_cpp(gcpfile, TRUE)$minmax
+
+## an error, but ok
+try(dirigible:::raster_info_gdal_cpp(sdsfile, FALSE))
+
+
+# read geometry
 str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
                          what = "geometry",
                          textformat = "json",

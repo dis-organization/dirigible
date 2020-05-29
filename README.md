@@ -64,8 +64,8 @@ u <- "/vsizip//vsicurl/http://dapds00.nci.org.au/thredds/fileServer/rr2/national
 #> [3] "radmap_v3_2015_filtered_dose.isi" "radmap_v3_2015_filtered_dose.txt"
 
 ## sds
-rf <- system.file("extdata/gdal/sds.nc", package = "vapour", mustWork = TRUE)
-dirigible:::sds_list_gdal_cpp(rf)
+sdsfile <- system.file("extdata/gdal/sds.nc", package = "vapour", mustWork = TRUE)
+dirigible:::sds_list_gdal_cpp(sdsfile)
 #> [1] "SUBDATASET_1_NAME=NETCDF:\"/perm_storage/home/mdsumner/R/x86_64-pc-linux-gnu-library/4.0/vapour/extdata/gdal/sds.nc\":vv" 
 #> [2] "SUBDATASET_1_DESC=[61x87] vv (64-bit floating-point)"                                                                     
 #> [3] "SUBDATASET_2_NAME=NETCDF:\"/perm_storage/home/mdsumner/R/x86_64-pc-linux-gnu-library/4.0/vapour/extdata/gdal/sds.nc\":vv2"
@@ -93,7 +93,65 @@ names(dirigible:::projection_info_gdal_cpp(f, layer = 0, sql = ""))
 #> [1] "Proj4"      "MICoordSys" "PrettyWkt"  "Wkt"        "EPSG"      
 #> [6] "XML"
 
-## read geometry
+## read gcp
+gcpfile <- system.file("extdata/gcps/volcano_gcp.tif", package = "vapour", mustWork = TRUE)
+dirigible:::raster_gcp_gdal_cpp(gcpfile)
+#> $Pixel
+#> [1]  0  5 20
+#> 
+#> $Line
+#> [1]  0  5 15
+#> 
+#> $X
+#> [1] 100 200 300
+#> 
+#> $Y
+#> [1] 100 200 300
+#> 
+#> $Z
+#> [1] 0 0 0
+#> 
+#> $CRS
+#> [1] ""
+
+## raster info
+dirigible:::raster_info_gdal_cpp(gcpfile, FALSE)
+#> $geotransform
+#> [1] 0 1 0 0 0 1
+#> 
+#> $dimXY
+#> [1] 20 15
+#> 
+#> $minmax
+#> [1] NA NA
+#> 
+#> $tilesXY
+#> [1] 20 15
+#> 
+#> $projection
+#> [1] ""
+#> 
+#> $bands
+#> [1] 1
+#> 
+#> $proj4
+#> [1] ""
+#> 
+#> $nodata_value
+#> [1] -3.4e+38
+#> 
+#> $overviews
+#> [1] 0
+dirigible:::raster_info_gdal_cpp(gcpfile, TRUE)$minmax
+#> [1] 100 163
+
+## an error, but ok
+try(dirigible:::raster_info_gdal_cpp(sdsfile, FALSE))
+#> Error in dirigible:::raster_info_gdal_cpp(sdsfile, FALSE) : 
+#>   no rasters found in dataset
+
+
+# read geometry
 str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
                          what = "geometry",
                          textformat = "json",

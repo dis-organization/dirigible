@@ -65,3 +65,11 @@ warp_in_memory_gdal_cpp <- function(dsn, source_WKT, target_WKT, target_geotrans
     .Call(`_dirigible_warp_in_memory_gdal_cpp`, dsn, source_WKT, target_WKT, target_geotransform, target_dim, band)
 }
 
+raster_info_gdal_cpp <- function(dsn, min_max) {
+    .Call(`_dirigible_raster_info_gdal_cpp`, dsn, min_max)
+}
+
+raster_gcp_gdal_cpp <- function(dsn) {
+    .Call(`_dirigible_raster_gcp_gdal_cpp`, dsn)
+}
+

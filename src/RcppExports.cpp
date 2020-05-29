@@ -205,6 +205,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// raster_info_gdal_cpp
+List raster_info_gdal_cpp(CharacterVector dsn, LogicalVector min_max);
+RcppExport SEXP _dirigible_raster_info_gdal_cpp(SEXP dsnSEXP, SEXP min_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type min_max(min_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(raster_info_gdal_cpp(dsn, min_max));
+    return rcpp_result_gen;
+END_RCPP
+}
+// raster_gcp_gdal_cpp
+List raster_gcp_gdal_cpp(CharacterVector dsn);
+RcppExport SEXP _dirigible_raster_gcp_gdal_cpp(SEXP dsnSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    rcpp_result_gen = Rcpp::wrap(raster_gcp_gdal_cpp(dsn));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -223,6 +246,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_vsi_list_gdal_cpp", (DL_FUNC) &_dirigible_vsi_list_gdal_cpp, 1},
     {"_dirigible_sds_list_gdal_cpp", (DL_FUNC) &_dirigible_sds_list_gdal_cpp, 1},
     {"_dirigible_warp_in_memory_gdal_cpp", (DL_FUNC) &_dirigible_warp_in_memory_gdal_cpp, 6},
+    {"_dirigible_raster_info_gdal_cpp", (DL_FUNC) &_dirigible_raster_info_gdal_cpp, 2},
+    {"_dirigible_raster_gcp_gdal_cpp", (DL_FUNC) &_dirigible_raster_gcp_gdal_cpp, 1},
     {NULL, NULL, 0}
 };
 

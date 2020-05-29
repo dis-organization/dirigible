@@ -123,3 +123,13 @@ return gdalwarpmem::gdal_warp_in_memory(dsn,
                     target_dim,
                     band);
 }
+// [[Rcpp::export]]
+List raster_info_gdal_cpp(CharacterVector dsn, LogicalVector min_max) {
+  return gdalheaders::gdal_raster_info(dsn, min_max);
+}
+
+// [[Rcpp::export]]
+List raster_gcp_gdal_cpp(CharacterVector dsn) {
+  return gdalheaders::gdal_raster_gcp(dsn);
+}
+
