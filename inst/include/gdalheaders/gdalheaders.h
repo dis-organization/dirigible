@@ -38,7 +38,7 @@ inline CharacterVector gdal_version()
 
 inline List gdal_list_drivers()
 {
-  GDALAllRegister();
+
 
   int n = GetGDALDriverManager()->GetDriverCount();
 
@@ -808,7 +808,7 @@ inline CharacterVector gdal_report_fields(Rcpp::CharacterVector dsource,
                                              Rcpp::IntegerVector layer = 0,
                                              Rcpp::CharacterVector sql = "")
 {
-  GDALAllRegister();
+
   GDALDataset       *poDS;
   poDS = (GDALDataset*) GDALOpenEx(dsource[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
@@ -945,7 +945,7 @@ inline CharacterVector  gdal_vsi_list(CharacterVector urlpath)
 inline CharacterVector gdal_sds_list(const char* pszFilename)
 {
   GDALDataset  *poDataset;
-  GDALAllRegister();
+
   poDataset = (GDALDataset *) GDALOpen( pszFilename, GA_ReadOnly );
   if( poDataset == NULL )
   {
@@ -996,7 +996,7 @@ inline CharacterVector gdal_sds_list(const char* pszFilename)
 inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
 {
   GDALDatasetH hDataset;
-  GDALAllRegister();
+
   hDataset = GDALOpenEx(dsn[0], GA_ReadOnly, nullptr, NULL, nullptr);
 
   if( hDataset == nullptr )
@@ -1128,7 +1128,7 @@ inline List gdal_raster_gcp(CharacterVector dsn) {
   // get GCPs if any
   GDALDatasetH hDataset;
   //GDALDataset  *poDataset;
-  GDALAllRegister();
+
   hDataset = GDALOpenEx( dsn[0], GA_ReadOnly, nullptr, NULL, nullptr);
   if( hDataset == nullptr )
   {
@@ -1194,7 +1194,7 @@ inline List gdal_raster_io(CharacterVector dsn,
   int outYSize = window[5];
 
   GDALDataset  *poDataset;
-  GDALAllRegister();
+
   poDataset = (GDALDataset *) GDALOpen(dsn[0], GA_ReadOnly );
   if( poDataset == NULL )
   {
