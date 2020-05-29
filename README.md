@@ -5,10 +5,21 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 GDAL headers for R. (A fresh attempt at vapour with a firmer re-use
 basis).
+
+The underlying `gdalheaders` namespace is now feature complete with the
+C++ level of the [vapour
+package](https://CRAN.r-project.org/package=vapour). The main thing to
+do is establish this namespace as a headers-only package, then migrate
+vapour over to use that. To do that we need Windows and MacOS support,
+which includes making sure the rwinlib tools/ stuff works and that the
+metadata files are set up correctly on package load, and cleaned up with
+unload.
 
 ## Installation
 
