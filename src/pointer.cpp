@@ -34,10 +34,19 @@ SEXP gh_GDALClose(SEXP xp) {
   return res;
 }
 
+// surely no point to a hook like this, we just want a src/ wrap to do what gdal_list_drivers() gets
 // [[Rcpp::export]]
 SEXP gh_GetGDALDriverManager()  {
   GDALDriverManager *gdm  = GetGDALDriverManager();
-  gdm->
  Rcpp::XPtr<GDALDriverManager> ptr(gdm);
  return ptr;
 }
+
+// but I'm practicing the art ...
+// [[Rcpp::export]]
+SEXP gh_GetDriverCount(SEXP xp)  {
+  Rcpp::XPtr<GDALDriverManager> ptr(xp);
+  int n = ptr->GetDriverCount();
+  return Rcpp::wrap(n);
+}
+

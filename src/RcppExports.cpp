@@ -274,6 +274,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gh_GetDriverCount
+SEXP gh_GetDriverCount(SEXP xp);
+RcppExport SEXP _dirigible_gh_GetDriverCount(SEXP xpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type xp(xpSEXP);
+    rcpp_result_gen = Rcpp::wrap(gh_GetDriverCount(xp));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -298,6 +309,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_gh_GDALOpenEx", (DL_FUNC) &_dirigible_gh_GDALOpenEx, 1},
     {"_dirigible_gh_GDALClose", (DL_FUNC) &_dirigible_gh_GDALClose, 1},
     {"_dirigible_gh_GetGDALDriverManager", (DL_FUNC) &_dirigible_gh_GetGDALDriverManager, 0},
+    {"_dirigible_gh_GetDriverCount", (DL_FUNC) &_dirigible_gh_GetDriverCount, 1},
     {NULL, NULL, 0}
 };
 

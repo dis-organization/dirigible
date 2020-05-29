@@ -5,3 +5,6 @@ tab <- dirigible:::gh_GDALOpenEx(f)
 gcp <- dirigible:::gh_GDALOpenEx(gcpfile)
 dirigible:::gh_GDALClose(tab)
 dirigible:::gh_GDALClose(gcp)
+
+dm <- dirigible:::gh_GetGDALDriverManager()
+dirigible:::gh_GetDriverCount(dm)

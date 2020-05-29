@@ -89,3 +89,7 @@ gh_GetGDALDriverManager <- function() {
     .Call(`_dirigible_gh_GetGDALDriverManager`)
 }
 
+gh_GetDriverCount <- function(xp) {
+    .Call(`_dirigible_gh_GetDriverCount`, xp)
+}
+
