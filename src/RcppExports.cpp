@@ -242,6 +242,38 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gh_GDALOpenEx
+SEXP gh_GDALOpenEx(CharacterVector dsn);
+RcppExport SEXP _dirigible_gh_GDALOpenEx(SEXP dsnSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    rcpp_result_gen = Rcpp::wrap(gh_GDALOpenEx(dsn));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gh_GDALClose
+SEXP gh_GDALClose(SEXP xp);
+RcppExport SEXP _dirigible_gh_GDALClose(SEXP xpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type xp(xpSEXP);
+    rcpp_result_gen = Rcpp::wrap(gh_GDALClose(xp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gh_GetGDALDriverManager
+SEXP gh_GetGDALDriverManager();
+RcppExport SEXP _dirigible_gh_GetGDALDriverManager() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(gh_GetGDALDriverManager());
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -263,6 +295,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_raster_info_gdal_cpp", (DL_FUNC) &_dirigible_raster_info_gdal_cpp, 2},
     {"_dirigible_raster_gcp_gdal_cpp", (DL_FUNC) &_dirigible_raster_gcp_gdal_cpp, 1},
     {"_dirigible_raster_io_gdal_cpp", (DL_FUNC) &_dirigible_raster_io_gdal_cpp, 4},
+    {"_dirigible_gh_GDALOpenEx", (DL_FUNC) &_dirigible_gh_GDALOpenEx, 1},
+    {"_dirigible_gh_GDALClose", (DL_FUNC) &_dirigible_gh_GDALClose, 1},
+    {"_dirigible_gh_GetGDALDriverManager", (DL_FUNC) &_dirigible_gh_GetGDALDriverManager, 0},
     {NULL, NULL, 0}
 };
 

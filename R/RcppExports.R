@@ -77,3 +77,15 @@ raster_io_gdal_cpp <- function(dsn, window, band, resample) {
     .Call(`_dirigible_raster_io_gdal_cpp`, dsn, window, band, resample)
 }
 
+gh_GDALOpenEx <- function(dsn) {
+    .Call(`_dirigible_gh_GDALOpenEx`, dsn)
+}
+
+gh_GDALClose <- function(xp) {
+    .Call(`_dirigible_gh_GDALClose`, xp)
+}
+
+gh_GetGDALDriverManager <- function() {
+    .Call(`_dirigible_gh_GetGDALDriverManager`)
+}
+
