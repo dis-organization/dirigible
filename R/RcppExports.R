@@ -85,6 +85,30 @@ gh_GDALClose <- function(xp) {
     .Call(`_dirigible_gh_GDALClose`, xp)
 }
 
+gh_ExecuteSQL <- function(xp, sql, extent) {
+    .Call(`_dirigible_gh_ExecuteSQL`, xp, sql, extent)
+}
+
+gh_GetLayer <- function(xp, layer) {
+    .Call(`_dirigible_gh_GetLayer`, xp, layer)
+}
+
+gh_GetNextFeature <- function(xp) {
+    .Call(`_dirigible_gh_GetNextFeature`, xp)
+}
+
+gh_DestroyFeature <- function(xp) {
+    .Call(`_dirigible_gh_DestroyFeature`, xp)
+}
+
+gh_getGeometryRef <- function(xp) {
+    .Call(`_dirigible_gh_getGeometryRef`, xp)
+}
+
+gh_exportToWkb <- function(xp) {
+    .Call(`_dirigible_gh_exportToWkb`, xp)
+}
+
 gh_GetGDALDriverManager <- function() {
     .Call(`_dirigible_gh_GetGDALDriverManager`)
 }

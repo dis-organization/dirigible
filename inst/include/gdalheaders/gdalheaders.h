@@ -463,6 +463,7 @@ inline List gdal_read_geometry(CharacterVector dsn,
 
       OGRGeometry *poGeometry;
       poGeometry = poFeature->GetGeometryRef();
+
       if (poGeometry == NULL) {
         warncount++;
         feature_xx.push_back(R_NilValue);
