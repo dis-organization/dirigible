@@ -102,6 +102,9 @@ sstif <- system.file("extdata", "sst.tif", package = "vapour")
 dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1, resample = "nearestneighbour")
 dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1,  resample = "lanczos")
 
+## name of driver in use
+dirigible:::driver_gdal_cpp(sstif)
+
 # read geometry
 str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
                          what = "geometry",

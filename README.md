@@ -176,6 +176,10 @@ dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1, 
 #> [17] 286.1346 285.9894 286.3176 286.6353 286.0227 285.9557 286.0615 286.3574
 #> [25] 286.8593
 
+## name of driver in use
+dirigible:::driver_gdal_cpp(sstif)
+#> [1] "GTiff"
+
 # read geometry
 str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",
                          what = "geometry",
