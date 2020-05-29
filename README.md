@@ -150,6 +150,20 @@ try(dirigible:::raster_info_gdal_cpp(sdsfile, FALSE))
 #> Error in dirigible:::raster_info_gdal_cpp(sdsfile, FALSE) : 
 #>   no rasters found in dataset
 
+## read raster
+sstif <- system.file("extdata", "sst.tif", package = "vapour")
+## a 5*5 window from a 10*10 region
+dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1, resample = "nearestneighbour")
+#> [[1]]
+#>  [1] 285.743 285.786 285.999 286.064 286.038 285.763 285.698 285.831 286.265
+#> [10] 286.134 286.070 285.931 286.092 286.450 286.501 286.264 286.076 285.915
+#> [19] 286.335 286.702 285.870 285.940 286.252 286.549 287.142
+dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1,  resample = "lanczos")
+#> [[1]]
+#>  [1] 285.7112 285.7088 285.9000 286.0153 285.9586 285.7220 285.7106 285.7733
+#>  [9] 286.1091 286.2422 286.0036 285.8829 285.9075 286.3403 286.4126 286.2443
+#> [17] 286.1346 285.9894 286.3176 286.6353 286.0227 285.9557 286.0615 286.3574
+#> [25] 286.8593
 
 # read geometry
 str(dirigible:::read_geometry_gdal_cpp(f, layer = 0, sql = "",

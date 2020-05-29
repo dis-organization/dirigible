@@ -228,6 +228,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// raster_io_gdal_cpp
+List raster_io_gdal_cpp(CharacterVector dsn, IntegerVector window, IntegerVector band, CharacterVector resample);
+RcppExport SEXP _dirigible_raster_io_gdal_cpp(SEXP dsnSEXP, SEXP windowSEXP, SEXP bandSEXP, SEXP resampleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type window(windowSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type band(bandSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type resample(resampleSEXP);
+    rcpp_result_gen = Rcpp::wrap(raster_io_gdal_cpp(dsn, window, band, resample));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
@@ -248,6 +262,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_warp_in_memory_gdal_cpp", (DL_FUNC) &_dirigible_warp_in_memory_gdal_cpp, 6},
     {"_dirigible_raster_info_gdal_cpp", (DL_FUNC) &_dirigible_raster_info_gdal_cpp, 2},
     {"_dirigible_raster_gcp_gdal_cpp", (DL_FUNC) &_dirigible_raster_gcp_gdal_cpp, 1},
+    {"_dirigible_raster_io_gdal_cpp", (DL_FUNC) &_dirigible_raster_io_gdal_cpp, 4},
     {NULL, NULL, 0}
 };
 

@@ -73,3 +73,7 @@ raster_gcp_gdal_cpp <- function(dsn) {
     .Call(`_dirigible_raster_gcp_gdal_cpp`, dsn)
 }
 
+raster_io_gdal_cpp <- function(dsn, window, band, resample) {
+    .Call(`_dirigible_raster_io_gdal_cpp`, dsn, window, band, resample)
+}
+

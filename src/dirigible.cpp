@@ -133,3 +133,10 @@ List raster_gcp_gdal_cpp(CharacterVector dsn) {
   return gdalheaders::gdal_raster_gcp(dsn);
 }
 
+// [[Rcpp::export]]
+List raster_io_gdal_cpp(CharacterVector dsn,
+                        IntegerVector window,
+                        IntegerVector band,
+                        CharacterVector resample) {
+  return gdalheaders::gdal_raster_io(dsn, window, band, resample);
+}
