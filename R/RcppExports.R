@@ -29,8 +29,8 @@ layer_names_gdal_cpp <- function(dsn) {
     .Call(`_dirigible_layer_names_gdal_cpp`, dsn)
 }
 
-feature_count_gdal_cpp <- function(dsn, layer) {
-    .Call(`_dirigible_feature_count_gdal_cpp`, dsn, layer)
+feature_count_gdal_cpp <- function(dsn, layer, sql, ex) {
+    .Call(`_dirigible_feature_count_gdal_cpp`, dsn, layer, sql, ex)
 }
 
 read_fields_gdal_cpp <- function(dsn, layer, sql, limit_n, skip_n, ex, fid_column_name) {

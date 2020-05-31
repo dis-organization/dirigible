@@ -36,6 +36,50 @@ inline CharacterVector gdal_version()
 }
 
 
+OGRLayer *gdal_layer(GDALDataset *poDS, IntegerVector layer, CharacterVector sql, NumericVector ex) {
+  OGRLayer  *poLayer;
+  OGRPolygon poly;
+  OGRLinearRing ring;
+
+  if (ex.length() == 4) {
+    ring.addPoint(ex[0], ex[2]); //xmin, ymin
+    ring.addPoint(ex[0], ex[3]); //xmin, ymax
+    ring.addPoint(ex[1], ex[3]); //xmax, ymax
+    ring.addPoint(ex[1], ex[2]); //xmax, ymin
+    ring.closeRings();
+    poly.addRing(&ring);
+  }
+
+  if (sql[0] != "") {
+    if (ex.length() == 4) {
+      poLayer =  poDS->ExecuteSQL(sql[0],
+                                  &poly,
+                                  NULL );
+    } else {
+      poLayer =  poDS->ExecuteSQL(sql[0],
+                                  NULL,
+                                  NULL );
+    }
+
+    if (poLayer == NULL) {
+      Rcpp::stop("SQL execution failed.\n");
+    }
+
+  } else {
+    int nlayer = poDS->GetLayerCount();
+    if (layer[0] >= nlayer) {
+      Rprintf("layer count: %i\n", nlayer);
+      Rprintf("layer index: %i\n", layer[0]);
+      Rcpp::stop("layer index exceeds layer count");
+    }
+    poLayer =  poDS->GetLayer(layer[0]);
+  }
+  if (poLayer == NULL) {
+    Rcpp::stop("Layer open failed.\n");
+  }
+  return poLayer;
+}
+
 inline List gdal_list_drivers()
 {
 
@@ -158,40 +202,7 @@ inline List gdal_read_fields(CharacterVector dsn,
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer  *poLayer;
-  OGRPolygon poly;
-  OGRLinearRing ring;
-
-  if (ex.length() == 4) {
-    ring.addPoint(ex[0], ex[2]); //xmin, ymin
-    ring.addPoint(ex[0], ex[3]); //xmin, ymax
-    ring.addPoint(ex[1], ex[3]); //xmax, ymax
-    ring.addPoint(ex[1], ex[2]); //xmax, ymin
-    ring.closeRings();
-    poly.addRing(&ring);
-  }
-
-  if (sql[0] != "") {
-    if (ex.length() == 4) {
-      poLayer =  poDS->ExecuteSQL(sql[0],
-                                  &poly,
-                                  NULL );
-    } else {
-      poLayer =  poDS->ExecuteSQL(sql[0],
-                                  NULL,
-                                  NULL );
-    }
-
-    if (poLayer == NULL) {
-      Rcpp::stop("SQL execution failed.\n");
-    }
-
-  } else {
-    poLayer =  poDS->GetLayer(layer[0]);
-  }
-  if (poLayer == NULL) {
-    Rcpp::stop("Layer open failed.\n");
-  }
+  OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
 
   OGRFeature *poFeature;
   poLayer->ResetReading();
@@ -294,24 +305,18 @@ inline List gdal_read_fields(CharacterVector dsn,
 
 
 inline DoubleVector gdal_feature_count(CharacterVector dsn,
-                                       IntegerVector layer) {
+                                       IntegerVector layer, CharacterVector sql, NumericVector ex) {
   GDALDataset       *poDS;
   poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer  *aLayer;
-  int nlayer = poDS->GetLayerCount();
-  if (layer[0] >= nlayer) {
-    Rprintf("layer count: %i\n", nlayer);
-    Rprintf("layer index: %i\n", layer[0]);
-    Rcpp::stop("layer index exceeds layer count");
-  }
-  aLayer =  poDS->GetLayer(layer[0]);
-  OGRFeature *aFeature;
-  aLayer->ResetReading();
-  double nFeature = (double)aLayer->GetFeatureCount(TRUE);
+
+  OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
+
+  poLayer->ResetReading();
+  double nFeature = (double)poLayer->GetFeatureCount(TRUE);
   GDALClose( poDS );
 
   DoubleVector out(1);
@@ -334,27 +339,16 @@ inline CharacterVector gdal_driver(CharacterVector dsn)
   return(dname);
 } // gdal_driver
 
-inline CharacterVector gdal_layer_names(CharacterVector dsn,
-                                              CharacterVector sql = "")
+inline CharacterVector gdal_layer_names(CharacterVector dsn)
 {
+  // remove sql 2020-05-31
   GDALDataset       *poDS;
   poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer  *poLayer;
-  if (sql[0] != "") {
-    poLayer =  poDS->ExecuteSQL(sql[0],
-                                NULL,
-                                NULL);
-    if (poLayer == NULL) {
-      Rcpp::stop("SQL execution failed.\n");
-    }
-    // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
-    poDS->ReleaseResultSet(poLayer);
-
-  }
+  OGRLayer  *poLayer;  //gdal_layer_names
   int nlayer = poDS->GetLayerCount();
   CharacterVector lnames = CharacterVector(nlayer);
   for (int ilayer = 0; ilayer < nlayer; ilayer++) {
@@ -383,44 +377,8 @@ inline List gdal_read_geometry(CharacterVector dsn,
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer  *poLayer;
+  OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
 
-
-  OGRPolygon poly;
-  OGRLinearRing ring;
-
-  if (ex.length() == 4) {
-
-    ring.addPoint(ex[0], ex[2]); //xmin, ymin
-    ring.addPoint(ex[0], ex[3]); //xmin, ymax
-    ring.addPoint(ex[1], ex[3]); //xmax, ymax
-    ring.addPoint(ex[1], ex[2]); //xmax, ymin
-
-    ring.closeRings();
-    poly.addRing(&ring);
-  }
-
-  if (sql[0] != "") {
-    if (ex.length() == 4) {
-      poLayer =  poDS->ExecuteSQL(sql[0],
-                                  &poly,
-                                  NULL );
-    } else {
-      poLayer =  poDS->ExecuteSQL(sql[0],
-                                  NULL,
-                                  NULL );
-    }
-
-    if (poLayer == NULL) {
-      Rcpp::stop("SQL execution failed.\n");
-    }
-
-  } else {
-    poLayer =  poDS->GetLayer(layer[0]);
-  }
-  if (poLayer == NULL) {
-    Rcpp::stop("Layer open failed.\n");
-  }
   OGRFeature *poFeature;
   poLayer->ResetReading();
 
@@ -601,44 +559,9 @@ inline List gdal_read_names(CharacterVector dsn,
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer  *poLayer;
 
+  OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
 
-  OGRPolygon poly;
-  OGRLinearRing ring;
-
-  if (ex.length() == 4) {
-
-    ring.addPoint(ex[0], ex[2]); //xmin, ymin
-    ring.addPoint(ex[0], ex[3]); //xmin, ymax
-    ring.addPoint(ex[1], ex[3]); //xmax, ymax
-    ring.addPoint(ex[1], ex[2]); //xmax, ymin
-
-    ring.closeRings();
-    poly.addRing(&ring);
-  }
-
-  if (sql[0] != "") {
-    if (ex.length() == 4) {
-      poLayer =  poDS->ExecuteSQL(sql[0],
-                                  &poly,
-                                  NULL );
-    } else {
-      poLayer =  poDS->ExecuteSQL(sql[0],
-                                  NULL,
-                                  NULL );
-    }
-
-    if (poLayer == NULL) {
-      Rcpp::stop("SQL execution failed.\n");
-    }
-
-  } else {
-    poLayer =  poDS->GetLayer(layer[0]);
-  }
-  if (poLayer == NULL) {
-    Rcpp::stop("Layer open failed.\n");
-  }
   OGRFeature *poFeature;
   poLayer->ResetReading();
 
@@ -731,22 +654,10 @@ inline List gdal_projection_info(CharacterVector dsn,
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer  *poLayer;
-  if (sql[0] != "") {
-    poLayer =  poDS->ExecuteSQL(sql[0],
-                                NULL,
-                                NULL );
+  NumericVector zero(1);
+  zero[0] = 0.0;
+  OGRLayer *poLayer = gdal_layer(poDS, layer, sql, zero);
 
-    if (poLayer == NULL) {
-      Rcpp::stop("SQL execution failed.\n");
-    }
-
-  } else {
-    poLayer =  poDS->GetLayer(layer[0]);
-  }
-  if (poLayer == NULL) {
-    Rcpp::stop("Layer open failed.\n");
-  }
   OGRSpatialReference *SRS =  poLayer->GetSpatialRef();
 
   char *proj;  // this gets cleaned up lower in the SRS==NULL else
@@ -766,7 +677,7 @@ inline List gdal_projection_info(CharacterVector dsn,
     // do nothing, or warn
     // e.g. .shp with no .prj
   } else {
-    Rcpp::warning("not null");
+   // Rcpp::warning("not null");
     // SRS is not NULL, so explore validation
     //  OGRErr err = SRS->Validate();
     SRS->exportToProj4(&proj);
@@ -816,24 +727,7 @@ inline CharacterVector gdal_report_fields(Rcpp::CharacterVector dsource,
     Rcpp::stop("Open failed.\n");
   }
 
-
-  OGRLayer  *poLayer;
-
-  if (sql[0] != "") {
-    poLayer =  poDS->ExecuteSQL(sql[0],
-                                NULL,
-                                NULL );
-
-    if (poLayer == NULL) {
-      Rcpp::stop("SQL execution failed.\n");
-    }
-
-  } else {
-    poLayer =  poDS->GetLayer(layer[0]);
-  }
-  if (poLayer == NULL) {
-    Rcpp::stop("Layer open failed.\n");
-  }
+  OGRLayer *poLayer = gdal_layer(poDS, layer, sql, NumericVector::create(0));
 
   OGRFeature *poFeature;
   poLayer->ResetReading();

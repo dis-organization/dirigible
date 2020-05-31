@@ -46,8 +46,8 @@ CharacterVector layer_names_gdal_cpp(CharacterVector dsn) {
 }
 // [[Rcpp::export]]
 DoubleVector feature_count_gdal_cpp(CharacterVector dsn,  // double, could be a lot of features
-                     IntegerVector layer) {
- return gdalheaders::gdal_feature_count(dsn, layer);
+                     IntegerVector layer, CharacterVector sql, NumericVector ex) {
+ return gdalheaders::gdal_feature_count(dsn, layer, sql, ex);
 }
 
 // [[Rcpp::export]]
