@@ -97,10 +97,18 @@ dirigible:::raster_info_gdal_cpp(gcpfile, TRUE)$minmax
 try(dirigible:::raster_info_gdal_cpp(sdsfile, FALSE))
 
 ## read raster
-sstif <- system.file("extdata", "sst.tif", package = "vapour")
+sstif <- system.file("extdata", "sst.tif", package = "vapour", mustWork = TRUE)
 ## a 5*5 window from a 10*10 region
 dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1, resample = "nearestneighbour")
 dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1,  resample = "lanczos")
+
+## overviews
+otif <- system.file("extdata", "volcano_overview.tif", package = "vapour", mustWork = TRUE)
+matrix(dirigible:::raster_info_gdal_cpp(otif, FALSE)$overviews, ncol = 2, byrow = TRUE)
+
+## there are none
+matrix(dirigible:::raster_info_gdal_cpp(sstif, FALSE)$overviews, ncol = 2, byrow = TRUE)
+
 
 ## name of driver in use
 dirigible:::driver_gdal_cpp(sstif)

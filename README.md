@@ -180,7 +180,10 @@ dirigible:::raster_info_gdal_cpp(gcpfile, FALSE)
 #> [1] -3.4e+38
 #> 
 #> $overviews
-#> [1] 0
+#> integer(0)
+#> 
+#> $filelist
+#> [1] "/perm_storage/home/mdsumner/R/x86_64-pc-linux-gnu-library/4.0/vapour/extdata/gcps/volcano_gcp.tif"
 dirigible:::raster_info_gdal_cpp(gcpfile, TRUE)$minmax
 #> [1] 100 163
 
@@ -190,7 +193,7 @@ try(dirigible:::raster_info_gdal_cpp(sdsfile, FALSE))
 #>   no rasters found in dataset
 
 ## read raster
-sstif <- system.file("extdata", "sst.tif", package = "vapour")
+sstif <- system.file("extdata", "sst.tif", package = "vapour", mustWork = TRUE)
 ## a 5*5 window from a 10*10 region
 dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1, resample = "nearestneighbour")
 #> [[1]]
@@ -203,6 +206,20 @@ dirigible:::raster_io_gdal_cpp(sstif, window = c(0, 0, 10, 10, 5, 5), band = 1, 
 #>  [9] 286.1091 286.2422 286.0036 285.8829 285.9075 286.3403 286.4126 286.2443
 #> [17] 286.1346 285.9894 286.3176 286.6353 286.0227 285.9557 286.0615 286.3574
 #> [25] 286.8593
+
+## overviews
+otif <- system.file("extdata", "volcano_overview.tif", package = "vapour", mustWork = TRUE)
+matrix(dirigible:::raster_info_gdal_cpp(otif, FALSE)$overviews, ncol = 2, byrow = TRUE)
+#>      [,1] [,2]
+#> [1,]   31   44
+#> [2,]   16   22
+#> [3,]    8   11
+#> [4,]    4    6
+
+## there are none
+matrix(dirigible:::raster_info_gdal_cpp(sstif, FALSE)$overviews, ncol = 2, byrow = TRUE)
+#>      [,1] [,2]
+
 
 ## name of driver in use
 dirigible:::driver_gdal_cpp(sstif)

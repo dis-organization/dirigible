@@ -26,6 +26,8 @@ inline void osr_cleanup() {
   OSRCleanup();
 }
 
+// this force function takes cheap count, checks, then more expensive, checks,
+// then iterates and resets reading
 inline double force_layer_feature_count(OGRLayer *poLayer) {
   double out;
   out = (double)poLayer->GetFeatureCount(false);
@@ -215,8 +217,7 @@ inline List gdal_read_fields(CharacterVector dsn,
   OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
 
   OGRFeature *poFeature;
-  // this force function takes cheap count, checks, then more expensive, checks,
-  // then iterates and resets reading
+
   double  nFeature = force_layer_feature_count(poLayer);
 
   if (nFeature > MAX_INT) {
@@ -493,8 +494,6 @@ inline List gdal_read_geometry(CharacterVector dsn,
 
           NumericVector extent = NumericVector::create(minx, maxx, miny, maxy);
           feature_xx.push_back(extent);
-
-
         }
         // FIXME: do with wk, perhaps post-hoc from WKB return from here
         // if (what[0] == "point") {
@@ -517,15 +516,12 @@ inline List gdal_read_geometry(CharacterVector dsn,
     if (limit_n[0] > 0 && lFeature >= limit_n[0]) {
       break;  // short-circuit for limit_n
     }
-
   }
-
   // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
   if (sql[0] != "") {
     poDS->ReleaseResultSet(poLayer);
   }
   GDALClose( poDS );
-
   if (lFeature < 1) {
     if (skip_n[0] > 0) {
       Rcpp::stop("no features to be read (is 'skip_n' set too high?");
@@ -879,6 +875,8 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   GDALDatasetH hDataset;
 
   hDataset = GDALOpenEx(dsn[0], GA_ReadOnly, nullptr, NULL, nullptr);
+  char **pfilelist = GDALGetFileList(hDataset);
+  CharacterVector FileList = CharacterVector::create(*pfilelist);
 
   if( hDataset == nullptr )
   {
@@ -902,7 +900,6 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   for (int ii = 0; ii < 6; ii++) trans[ii] = adfGeoTransform[ii];
 
 
-
   GDALRasterBandH  hBand;
   int             nBlockXSize, nBlockYSize;
   //int             bGotMin, bGotMax;
@@ -915,7 +912,7 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
     GDALComputeRasterMinMax(hBand, TRUE, adfMinMax);
   }
 
-  int nn = 9;
+  int nn = 10;
   Rcpp::List out(nn);
   Rcpp::CharacterVector names(nn);
   out[0] = trans;
@@ -946,7 +943,6 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
 
   // get band number
   int nBands = GDALGetRasterCount(hDataset);
-
   out[5] = nBands;
   names[5] = "bands";
 
@@ -963,8 +959,8 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
 
   int ocount = GDALGetOverviewCount(hBand);
   // f <- system.file("extdata/volcano_overview.tif", package = "vapour", mustWork = TRUE)
-  IntegerVector oviews = IntegerVector(ocount * 2 + 1);
-  oviews[0] = ocount;
+  IntegerVector oviews = IntegerVector(ocount * 2);
+  //oviews[0] = ocount;
   if (ocount > 0) {
     GDALRasterBandH  oBand;
     for (int ii = 0; ii < ocount; ii++) {
@@ -974,8 +970,8 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
       int xsize = GDALGetRasterBandXSize(oBand);
       int ysize = GDALGetRasterBandYSize(oBand);
 
-      oviews[((ii + 1) * 2) - 1 ] = xsize;
-      oviews[((ii + 1) * 2) + 0 ] = ysize;
+      oviews[(ii * 2) + 0 ] = xsize;
+      oviews[(ii * 2) + 1 ] = ysize;
 
 
 
@@ -983,6 +979,9 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   }
   out[8] = oviews;
   names[8] = "overviews";
+
+  out[9] = FileList;
+  names[9] = "filelist";
 
   // if (GDALHasArbitraryOverviews(hDataset) > 0) {
   //   //HasArbitraryOverViews
