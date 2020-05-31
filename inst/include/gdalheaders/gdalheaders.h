@@ -97,10 +97,7 @@ inline OGRLayer *gdal_layer(GDALDataset *poDS, IntegerVector layer, CharacterVec
 
 inline List gdal_list_drivers()
 {
-
-
   int n = GetGDALDriverManager()->GetDriverCount();
-
   Rcpp::CharacterVector sname(n);
   Rcpp::CharacterVector lname(n);
   Rcpp::LogicalVector isvector(n);
@@ -117,8 +114,6 @@ inline List gdal_list_drivers()
     iscopy(idriver) = (dr->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL);
     iscreate(idriver) = (dr->GetMetadataItem(GDAL_DCAP_CREATE) != NULL);
     isvirt(idriver) = (dr->GetMetadataItem(GDAL_DCAP_VIRTUALIO) != NULL);
-
-
   }
   Rcpp::List out = Rcpp::List::create(Rcpp::Named("driver") = sname,
                                       Rcpp::Named("name") = lname,
