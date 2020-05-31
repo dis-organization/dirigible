@@ -96,7 +96,37 @@ unlist(dirigible:::read_names_gdal_cpp(osm,
                             limit_n = 0, 
                             skip_n = 0, ex = 0))
 #> [1] 100 101 102 103 104
-
+dirigible:::read_fields_gdal_cpp(osm, layer = 1, sql = "", limit_n = 0, skip_n = 0, ex = 0, fid_column_name = "")
+#> $osm_id
+#> [1] "100" "101" "102" "103" "104"
+#> 
+#> $name
+#> [1] ""             "blue"         "River Thames" ""             ""            
+#> 
+#> $highway
+#> [1] "footway"  "maybe"    ""         "cycleway" "cycleway"
+#> 
+#> $waterway
+#> [1] "" "" "" "" ""
+#> 
+#> $aerialway
+#> [1] "" "" "" "" ""
+#> 
+#> $barrier
+#> [1] "" "" "" "" ""
+#> 
+#> $man_made
+#> [1] "" "" "" "" ""
+#> 
+#> $z_order
+#> [1] 0 0 0 0 0
+#> 
+#> $other_tags
+#> [1] "\"layer\"=>\"0\""  ""                  "\"boat\"=>\"yes\""
+#> [4] "\"foot\"=>\"yes\"" ""                 
+#> 
+#> [[10]]
+#> NULL
 ## read proj info
 names(dirigible:::projection_info_gdal_cpp(f, layer = 0, sql = ""))
 #> [1] "Proj4"      "MICoordSys" "PrettyWkt"  "Wkt"        "EPSG"      

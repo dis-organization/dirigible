@@ -26,7 +26,22 @@ inline void osr_cleanup() {
   OSRCleanup();
 }
 
-
+inline double force_layer_feature_count(OGRLayer *poLayer) {
+  double out;
+  out = (double)poLayer->GetFeatureCount(false);
+  if (out == -1) {
+    out = (double)poLayer->GetFeatureCount(true);
+  }
+  if (out == -1) {
+    out = 0;
+   poLayer->ResetReading();
+   while(poLayer->GetNextFeature() != NULL) {
+     out++;
+   }
+   poLayer->ResetReading();
+  }
+  return out;
+}
 inline CharacterVector gdal_version()
 {
   Rcpp::CharacterVector out(1);
@@ -36,7 +51,7 @@ inline CharacterVector gdal_version()
 }
 
 
-OGRLayer *gdal_layer(GDALDataset *poDS, IntegerVector layer, CharacterVector sql, NumericVector ex) {
+inline OGRLayer *gdal_layer(GDALDataset *poDS, IntegerVector layer, CharacterVector sql, NumericVector ex) {
   OGRLayer  *poLayer;
   OGRPolygon poly;
   OGRLinearRing ring;
@@ -205,23 +220,9 @@ inline List gdal_read_fields(CharacterVector dsn,
   OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
 
   OGRFeature *poFeature;
-  poLayer->ResetReading();
-  double nFeature = (double)poLayer->GetFeatureCount();
-  nFeature = -1;
-  if (nFeature == -1) {
-    nFeature = 0;
-    // we have to find out first because this driver doesn't support GetFeatureCount
-    // https://trac.osgeo.org/gdal/wiki/rfc66_randomlayerreadwrite
-    // FIXME: should use gdal_feature_count()
-    while( (poFeature = poLayer->GetNextFeature()) != NULL )
-    {
-      nFeature++;
-      OGRFeature::DestroyFeature( poFeature );
-    }
-
-    poLayer->ResetReading();
-
-  }
+  // this force function takes cheap count, checks, then more expensive, checks,
+  // then iterates and resets reading
+  double  nFeature = force_layer_feature_count(poLayer);
 
   if (nFeature > MAX_INT) {
     Rcpp::warning("Number of features exceeds maximal number able to be read");
@@ -317,7 +318,8 @@ inline DoubleVector gdal_feature_count(CharacterVector dsn,
   OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
 
   poLayer->ResetReading();
-  double nFeature = (double)poLayer->GetFeatureCount(TRUE);
+  double nFeature = force_layer_feature_count(poLayer);
+
   // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
   if (sql[0] != "") {
     poDS->ReleaseResultSet(poLayer);
@@ -391,23 +393,13 @@ inline List gdal_read_geometry(CharacterVector dsn,
   CollectorList feature_xx;
   int iFeature = 0;
   int lFeature = 0;
-  int nFeature = (int)poLayer->GetFeatureCount();
+  int   nFeature = force_layer_feature_count(poLayer);
+
   if (nFeature > MAX_INT) {
     nFeature = MAX_INT;
     Rcpp::warning("Number of features exceeds maximal number able to be read");
   }
-  if (nFeature == -1) {
-    nFeature = 0;
-    // we have to find out first because this driver doesn't support GetFeatureCount
-    // https://trac.osgeo.org/gdal/wiki/rfc66_randomlayerreadwrite
-    while( (poFeature = poLayer->GetNextFeature()) != NULL )
-    {
-      nFeature++;
-      OGRFeature::DestroyFeature( poFeature );
-    }
-    poLayer->ResetReading();
 
-  }
 
 
   if (limit_n[0] > 0) {
@@ -576,26 +568,18 @@ inline List gdal_read_names(CharacterVector dsn,
   CollectorList feature_xx;
   int iFeature = 0;
   int lFeature = 0;
-  int nFeature = (int)poLayer->GetFeatureCount();
+  double   nFeature = force_layer_feature_count(poLayer);
+
+
   if (nFeature > MAX_INT) {
     Rcpp::warning("Number of features exceeds maximal number able to be read");
    nFeature = MAX_INT;
   }
-  if (nFeature == -1) {
-    nFeature = 0;
-    // we have to find out first because this driver doesn't support GetFeatureCount
-    // https://trac.osgeo.org/gdal/wiki/rfc66_randomlayerreadwrite
-    while( (poFeature = poLayer->GetNextFeature()) != NULL )
-    {
-      nFeature++;
-      OGRFeature::DestroyFeature( poFeature );
-    }
-    poLayer->ResetReading();
 
-  }
   if (limit_n[0] > 0) {
     if (limit_n[0] < nFeature) {
       nFeature = limit_n[0];
+
     }
   }
 

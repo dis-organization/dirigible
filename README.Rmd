@@ -81,7 +81,7 @@ unlist(dirigible:::read_names_gdal_cpp(osm,
                             sql = "", 
                             limit_n = 0, 
                             skip_n = 0, ex = 0))
-
+dirigible:::read_fields_gdal_cpp(osm, layer = 1, sql = "", limit_n = 0, skip_n = 0, ex = 0, fid_column_name = "")
 ## read proj info
 names(dirigible:::projection_info_gdal_cpp(f, layer = 0, sql = ""))
 
