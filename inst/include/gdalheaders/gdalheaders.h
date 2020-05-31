@@ -223,9 +223,10 @@ inline List gdal_read_fields(CharacterVector dsn,
 
   }
 
-  if (nFeature > MAX_INT)
-    Rcpp::stop("Number of features exceeds maximal number able to be read");
-
+  if (nFeature > MAX_INT) {
+    Rcpp::warning("Number of features exceeds maximal number able to be read");
+   nFeature = MAX_INT;
+  }
   // this is poorly laid out but works, check twice to avoid
   // over allocating as per #60
   if (limit_n[0] > 0) {
@@ -391,8 +392,10 @@ inline List gdal_read_geometry(CharacterVector dsn,
   int iFeature = 0;
   int lFeature = 0;
   int nFeature = (int)poLayer->GetFeatureCount();
-  if (nFeature > MAX_INT)
-    Rcpp::stop("Number of features exceeds maximal number able to be read");
+  if (nFeature > MAX_INT) {
+    nFeature = MAX_INT;
+    Rcpp::warning("Number of features exceeds maximal number able to be read");
+  }
   if (nFeature == -1) {
     nFeature = 0;
     // we have to find out first because this driver doesn't support GetFeatureCount
@@ -574,9 +577,10 @@ inline List gdal_read_names(CharacterVector dsn,
   int iFeature = 0;
   int lFeature = 0;
   int nFeature = (int)poLayer->GetFeatureCount();
-  if (nFeature > MAX_INT)
-    Rcpp::stop("Number of features exceeds maximal number able to be read");
-
+  if (nFeature > MAX_INT) {
+    Rcpp::warning("Number of features exceeds maximal number able to be read");
+   nFeature = MAX_INT;
+  }
   if (nFeature == -1) {
     nFeature = 0;
     // we have to find out first because this driver doesn't support GetFeatureCount
