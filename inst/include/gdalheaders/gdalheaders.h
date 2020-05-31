@@ -317,6 +317,10 @@ inline DoubleVector gdal_feature_count(CharacterVector dsn,
 
   poLayer->ResetReading();
   double nFeature = (double)poLayer->GetFeatureCount(TRUE);
+  // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
+  if (sql[0] != "") {
+    poDS->ReleaseResultSet(poLayer);
+  }
   GDALClose( poDS );
 
   DoubleVector out(1);
