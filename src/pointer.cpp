@@ -84,6 +84,10 @@ SEXP gh_DestroyFeature(SEXP xp) {
 }
 // [[Rcpp::export]]
 SEXP gh_getGeometryRef(SEXP xp) {
+  if (R_ExternalPtrAddr(xp) == NULL)  {
+    Rcpp::stop("feature pointer is nil");
+  }
+
   XPtr<OGRFeature> feature(xp);
 
   OGRGeometry *poGeometry;
