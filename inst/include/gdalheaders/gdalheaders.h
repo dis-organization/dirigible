@@ -875,8 +875,6 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   GDALDatasetH hDataset;
 
   hDataset = GDALOpenEx(dsn[0], GA_ReadOnly, nullptr, NULL, nullptr);
-  char **pfilelist = GDALGetFileList(hDataset);
-  CharacterVector FileList = CharacterVector::create(*pfilelist);
 
   if( hDataset == nullptr )
   {
@@ -899,6 +897,8 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   Rcpp::DoubleVector trans(6);
   for (int ii = 0; ii < 6; ii++) trans[ii] = adfGeoTransform[ii];
 
+  char **pfilelist = GDALGetFileList(hDataset);
+  CharacterVector FileList = CharacterVector::create(*pfilelist);
 
   GDALRasterBandH  hBand;
   int             nBlockXSize, nBlockYSize;
@@ -919,6 +919,23 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   names[0] = "geotransform";
   out[1] = Rcpp::IntegerVector::create(nXSize, nYSize);
   names[1] = "dimXY";
+  //GDALGetMetadataDomainList(hBand,  )
+
+
+  // FIXME: this is unused, how to get the compression type if present?
+  char **MDdomain = GDALGetMetadataDomainList(hBand);
+
+  int mdi = 0; // iterate though MetadataDomainList
+  bool has_compress = false;
+  while (MDdomain && MDdomain[mdi] != NULL) {
+    if (strcmp(MDdomain[mdi], "COMPRESS") == 0) {
+      has_compress = true;
+    }
+    mdi++;
+  }
+  //cleanup
+  CSLDestroy(MDdomain);
+
 
   DoubleVector vmmx(2);
   if (min_max[0]) {
@@ -983,14 +1000,6 @@ inline List gdal_raster_info(CharacterVector dsn, LogicalVector min_max)
   out[9] = FileList;
   names[9] = "filelist";
 
-  // if (GDALHasArbitraryOverviews(hDataset) > 0) {
-  //   //HasArbitraryOverViews
-  //   //GetOverviewCount
-  //   //GetOverview
-  //
-  //   out[8] = ocount;
-  //
-  // }
 
 
 
