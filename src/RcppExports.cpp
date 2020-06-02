@@ -6,16 +6,16 @@
 using namespace Rcpp;
 
 // geometry_cpp
-List geometry_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector what, IntegerVector set);
-RcppExport SEXP _dirigible_geometry_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP whatSEXP, SEXP setSEXP) {
+List geometry_cpp(CharacterVector dsn, IntegerVector layer, IntegerVector fid, CharacterVector format);
+RcppExport SEXP _dirigible_geometry_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP fidSEXP, SEXP formatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type what(whatSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type set(setSEXP);
-    rcpp_result_gen = Rcpp::wrap(geometry_cpp(dsn, layer, what, set));
+    Rcpp::traits::input_parameter< IntegerVector >::type fid(fidSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type format(formatSEXP);
+    rcpp_result_gen = Rcpp::wrap(geometry_cpp(dsn, layer, fid, format));
     return rcpp_result_gen;
 END_RCPP
 }

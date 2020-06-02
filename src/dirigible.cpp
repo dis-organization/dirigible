@@ -5,8 +5,8 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-List geometry_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector what, IntegerVector set) {
-  return gdalgeometry::gdal_geometry_(dsn, layer, what, set);
+List geometry_cpp(CharacterVector dsn, IntegerVector layer, IntegerVector fid, CharacterVector format) {
+  return gdalgeometry::gdal_geometry_(dsn, layer, fid, format);
 }
 // [[Rcpp::export]]
 LogicalVector register_gdal_cpp() {

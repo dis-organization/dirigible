@@ -467,11 +467,8 @@ inline List gdal_read_geometry(CharacterVector dsn,
             poGeometry->exportToWkt(&pszGEOM_WKT, wkbVariantIso );
             txt[0] = pszGEOM_WKT;
             CPLFree( pszGEOM_WKT );
-
           }
           feature_xx.push_back(txt);
-
-
         }
         if (what[0] == "extent") {
           OGREnvelope env;
@@ -479,19 +476,16 @@ inline List gdal_read_geometry(CharacterVector dsn,
           // if geometry is empty, set the envelope to undefined (otherwise all 0s)
           double minx, maxx, miny, maxy;
           if (poGeometry->IsEmpty()) {
-
             minx = NA_REAL;
             maxx = NA_REAL;
             miny = NA_REAL;
             maxy = NA_REAL;
-
           } else {
             minx = env.MinX;
             maxx = env.MaxX;
             miny = env.MinY;
             maxy = env.MaxY;
           }
-
           NumericVector extent = NumericVector::create(minx, maxx, miny, maxy);
           feature_xx.push_back(extent);
         }
