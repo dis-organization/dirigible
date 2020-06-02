@@ -40,7 +40,7 @@ Linux only for now.
 ```{r example, eval=TRUE, include=TRUE}
 library(dirigible)
 f <- system.file("extdata/tab/list_locality_postcode_meander_valley.tab", package = "vapour")
-
+l <- "list_locality_postcode_meander_valley"
 ## name of driver in use
 dirigible:::driver_gdal_cpp(f)
 
@@ -109,6 +109,8 @@ matrix(dirigible:::raster_info_gdal_cpp(otif, FALSE)$overviews, ncol = 2, byrow 
 ## there are none
 matrix(dirigible:::raster_info_gdal_cpp(sstif, FALSE)$overviews, ncol = 2, byrow = TRUE)
 
+## compression
+dirigible:::raster_info_gdal_cpp(otif, FALSE)
 
 ## name of driver in use
 dirigible:::driver_gdal_cpp(sstif)

@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// geometry_cpp
+List geometry_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector what, IntegerVector set);
+RcppExport SEXP _dirigible_geometry_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP whatSEXP, SEXP setSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type what(whatSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type set(setSEXP);
+    rcpp_result_gen = Rcpp::wrap(geometry_cpp(dsn, layer, what, set));
+    return rcpp_result_gen;
+END_RCPP
+}
 // register_gdal_cpp
 LogicalVector register_gdal_cpp();
 RcppExport SEXP _dirigible_register_gdal_cpp() {
@@ -246,6 +260,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_dirigible_geometry_cpp", (DL_FUNC) &_dirigible_geometry_cpp, 4},
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
     {"_dirigible_cleanup_gdal_cpp", (DL_FUNC) &_dirigible_cleanup_gdal_cpp, 0},
     {"_dirigible_version_gdal_cpp", (DL_FUNC) &_dirigible_version_gdal_cpp, 0},

@@ -1,10 +1,13 @@
 #include <Rcpp.h>
 #include "gdalheaders/gdalheaders.h"
 #include "gdalwarpmem/gdalwarpmem.h"
-
+#include "gdalgeometry/gdalgeometry.h"
 using namespace Rcpp;
 
-
+// [[Rcpp::export]]
+List geometry_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector what, IntegerVector set) {
+  return gdalgeometry::gdal_geometry_(dsn, layer, what, set);
+}
 // [[Rcpp::export]]
 LogicalVector register_gdal_cpp() {
   gdalheaders::gdal_register_all();
