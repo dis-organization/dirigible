@@ -344,6 +344,8 @@ inline CharacterVector gdal_driver(CharacterVector dsn)
 
 inline CharacterVector gdal_layer_names(CharacterVector dsn)
 {
+
+
   // remove sql 2020-05-31
   GDALDataset       *poDS;
   poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );

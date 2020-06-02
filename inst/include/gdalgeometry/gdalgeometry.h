@@ -13,7 +13,6 @@ using namespace Rcpp;
 
 
 //FIXME
-// o json, kml, gml - does anyone care
 // o add cast capability?
 // o add ExportToGEOS?
 // o boundary, buffer, centroid, convexhull, delaunaytriangulation, polygonize, segmentize,
@@ -68,7 +67,7 @@ inline NumericVector gdal_geometry_extent(OGRFeature *poFeature) {
     maxy = env.MaxY;
   }
   NumericVector extent = NumericVector::create(minx, maxx, miny, maxy);
-
+ return extent;
 }
 inline List gdal_geometry_(CharacterVector dsn,
                                IntegerVector layer,
