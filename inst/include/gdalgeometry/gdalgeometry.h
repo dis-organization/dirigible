@@ -71,6 +71,8 @@ inline NumericVector gdal_geometry_extent(OGRFeature *poFeature) {
 }
 inline List gdal_geometry_(CharacterVector dsn,
                                IntegerVector layer,
+                               CharacterVector sql,
+                               NumericVector ex,
                                IntegerVector fid,
                                CharacterVector format)
 {
@@ -80,7 +82,7 @@ inline List gdal_geometry_(CharacterVector dsn,
   {
     Rcpp::stop("Open failed.\n");
   }
-  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, "", 0);
+  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
 
   OGRFeature *poFeature;
   OGRGeometry *poGeometry;

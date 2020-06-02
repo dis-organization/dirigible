@@ -6,16 +6,18 @@
 using namespace Rcpp;
 
 // geometry_cpp
-List geometry_cpp(CharacterVector dsn, IntegerVector layer, IntegerVector fid, CharacterVector format);
-RcppExport SEXP _dirigible_geometry_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP fidSEXP, SEXP formatSEXP) {
+List geometry_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, IntegerVector fid, CharacterVector format);
+RcppExport SEXP _dirigible_geometry_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP fidSEXP, SEXP formatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type fid(fidSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type format(formatSEXP);
-    rcpp_result_gen = Rcpp::wrap(geometry_cpp(dsn, layer, fid, format));
+    rcpp_result_gen = Rcpp::wrap(geometry_cpp(dsn, layer, sql, ex, fid, format));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -260,7 +262,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_dirigible_geometry_cpp", (DL_FUNC) &_dirigible_geometry_cpp, 4},
+    {"_dirigible_geometry_cpp", (DL_FUNC) &_dirigible_geometry_cpp, 6},
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
     {"_dirigible_cleanup_gdal_cpp", (DL_FUNC) &_dirigible_cleanup_gdal_cpp, 0},
     {"_dirigible_version_gdal_cpp", (DL_FUNC) &_dirigible_version_gdal_cpp, 0},
