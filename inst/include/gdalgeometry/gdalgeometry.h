@@ -11,6 +11,44 @@
 namespace gdalgeometry {
 using namespace Rcpp;
 
+inline IntegerVector limit_skip_n_to_start_end_len(IntegerVector skip_n, IntegerVector limit_n, IntegerVector n) {
+  int start = 0;
+  int end = n[0] - 1;
+  if (skip_n[0] > 0) {  // silently ignore negative values
+    start = skip_n[0];
+  }
+  if (limit_n[0] > 0) { // silently ignore negative values
+    end = start + limit_n[0] - 1;
+  }
+  if (start >= n[0]) {
+    Rcpp::stop("skip_n skips all available features");
+  }
+  if (end > n[0]) {
+    if (start > 0) {
+      Rcpp::warning("limit_n is greater than the number of available features (given 'skip_n')");
+    } else {
+      Rcpp::warning("limit_n is greater than the number of available features");
+    }
+    end = n[0] - 1;
+  }
+  int len = end - start + 1;
+  IntegerVector out(3);
+  out[0] = start; out[1] = end; out[2] = len;
+  return  out;
+}
+
+inline NumericVector layer_read_fid(OGRLayer *poLayer) {
+  double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
+
+  NumericVector fids(nFeature);
+  OGRFeature *poFeature;
+  double ii = 0;
+  while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
+   fids[ii] = poFeature->GetFID();
+   OGRFeature::DestroyFeature(poFeature);
+  }
+  return fids;
+}
 
 //FIXME
 // o add cast capability?
@@ -69,33 +107,18 @@ inline NumericVector gdal_geometry_extent(OGRFeature *poFeature) {
   NumericVector extent = NumericVector::create(minx, maxx, miny, maxy);
  return extent;
 }
-inline List gdal_geometry_(CharacterVector dsn,
-                               IntegerVector layer,
-                               CharacterVector sql,
-                               NumericVector ex,
+inline List gdal_geometry_(OGRLayer *poLayer,
                                IntegerVector fid,
                                CharacterVector format)
 {
-  GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
-  if( poDS == NULL )
-  {
-    Rcpp::stop("Open failed.\n");
-  }
-  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
 
   OGRFeature *poFeature;
   OGRGeometry *poGeometry;
   poLayer->ResetReading();
-
-  //OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
   int len = fid.length();
-
   List feature_xx(len);
-
   int iFeature = 0;
   int lFeature = 0;
-
   int nFeature = gdalheaders::force_layer_feature_count(poLayer);
   bool was_bad = false;
   for (int iter = 0; iter < fid.length(); iter++) {
@@ -105,12 +128,14 @@ inline List gdal_geometry_(CharacterVector dsn,
            was_bad = true;
          } else {
            // work through format
-           if (format[0] == "geometry") {
+           // FIXME: get rid of "geometry"
+           if (format[0] == "wkb" | format[0] == "geometry") {
              feature_xx[iter] = gdal_geometry_raw(poFeature);
            }
            if (format[0] == "wkt") {
              feature_xx[iter] = gdal_geometry_wkt(poFeature);
            }
+           // FIXME: maybe call it envelope not extent
            if (format[0] == "extent") {
              feature_xx[iter] = gdal_geometry_extent(poFeature);
            }

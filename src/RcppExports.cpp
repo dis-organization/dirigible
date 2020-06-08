@@ -5,6 +5,23 @@
 
 using namespace Rcpp;
 
+// geometry_cpp_limit_skip
+List geometry_cpp_limit_skip(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector format, IntegerVector limit_n, IntegerVector skip_n);
+RcppExport SEXP _dirigible_geometry_cpp_limit_skip(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP formatSEXP, SEXP limit_nSEXP, SEXP skip_nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type format(formatSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type limit_n(limit_nSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type skip_n(skip_nSEXP);
+    rcpp_result_gen = Rcpp::wrap(geometry_cpp_limit_skip(dsn, layer, sql, ex, format, limit_n, skip_n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // geometry_cpp
 List geometry_cpp(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, IntegerVector fid, CharacterVector format);
 RcppExport SEXP _dirigible_geometry_cpp(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP fidSEXP, SEXP formatSEXP) {
@@ -262,6 +279,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_dirigible_geometry_cpp_limit_skip", (DL_FUNC) &_dirigible_geometry_cpp_limit_skip, 7},
     {"_dirigible_geometry_cpp", (DL_FUNC) &_dirigible_geometry_cpp, 6},
     {"_dirigible_register_gdal_cpp", (DL_FUNC) &_dirigible_register_gdal_cpp, 0},
     {"_dirigible_cleanup_gdal_cpp", (DL_FUNC) &_dirigible_cleanup_gdal_cpp, 0},
