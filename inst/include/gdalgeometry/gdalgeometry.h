@@ -37,7 +37,7 @@ inline IntegerVector limit_skip_n_to_start_end_len(IntegerVector skip_n, Integer
   return  out;
 }
 
-inline NumericVector layer_read_fid(OGRLayer *poLayer) {
+inline NumericVector layer_read_fids_all(OGRLayer *poLayer) {
   double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
   NumericVector fids(nFeature);
@@ -46,8 +46,114 @@ inline NumericVector layer_read_fid(OGRLayer *poLayer) {
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
    fids[ii] = poFeature->GetFID();
    OGRFeature::DestroyFeature(poFeature);
+   ii++;
   }
   return fids;
+}
+
+inline NumericVector dsn_read_fids_all(CharacterVector dsn, IntegerVector layer,
+                                       CharacterVector sql, NumericVector ex) {
+
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, sql = sql, ex =  ex);
+ NumericVector out = layer_read_fids_all(poLayer);
+ GDALClose(poDS);
+ return out;
+}
+
+inline NumericVector layer_read_fids_ij(OGRLayer *poLayer, NumericVector ij) {
+ // double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
+
+  NumericVector fids(ij[1] - ij[0] + 1);
+  OGRFeature *poFeature;
+  double cnt = 0;
+  double ii = 0;
+  while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
+    if (ii == ij[0] || (ii > ij[0] && ii <= ij[1])) {
+      fids[cnt] = poFeature->GetFID();
+      cnt++;
+    }
+    ii++;
+    OGRFeature::DestroyFeature(poFeature);
+  }
+  if (cnt < fids.length()) {
+    Rcpp::warning("not as many FIDs as requested");
+  }
+
+
+  return fids;
+}
+
+inline NumericVector dsn_read_fids_ij(CharacterVector dsn, IntegerVector layer,
+                                       CharacterVector sql, NumericVector ex,
+                                       NumericVector ij) {
+
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, sql = sql, ex =  ex);
+  NumericVector out = layer_read_fids_ij(poLayer, ij);
+  GDALClose(poDS);
+  return out;
+}
+
+
+inline NumericVector layer_read_fids_ia(OGRLayer *poLayer, NumericVector ia) {
+  // double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
+
+  NumericVector fids(ia.length());
+  OGRFeature *poFeature;
+  double ii = 0;
+  double cnt = 0;
+  while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
+    if (ii == ia[cnt]) {
+      fids[cnt] = poFeature->GetFID();
+      cnt++;
+    }
+    ii++;
+    OGRFeature::DestroyFeature(poFeature);
+  }
+  if (cnt < fids.length()) {
+    Rcpp::warning("not all FIDS found");
+  }
+  return fids;
+}
+
+inline NumericVector dsn_read_fids_ia(CharacterVector dsn, IntegerVector layer,
+                                      CharacterVector sql, NumericVector ex,
+                                      NumericVector ia) {
+
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, sql = sql, ex =  ex);
+  NumericVector out = layer_read_fids_ia(poLayer, ia);
+  GDALClose(poDS);
+  return out;
+}
+
+
+
+inline CharacterVector gdal_proj_to_wkt(CharacterVector proj_str) {
+  OGRSpatialReference oSRS;
+  char *pszWKT = NULL;
+  oSRS.importFromProj4(proj_str[0]);
+  oSRS.exportToWkt(&pszWKT);
+  CharacterVector out =  Rcpp::CharacterVector::create(pszWKT);
+  CPLFree(pszWKT);
+
+  return out;
 }
 
 //FIXME

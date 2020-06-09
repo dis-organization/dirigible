@@ -85,3 +85,15 @@ raster_io_gdal_cpp <- function(dsn, window, band, resample) {
     .Call(`_dirigible_raster_io_gdal_cpp`, dsn, window, band, resample)
 }
 
+gdal_read_fids_all <- function(dsn, layer, sql, ex) {
+    .Call(`_dirigible_gdal_read_fids_all`, dsn, layer, sql, ex)
+}
+
+gdal_read_fids_ij <- function(dsn, layer, sql, ex, ij) {
+    .Call(`_dirigible_gdal_read_fids_ij`, dsn, layer, sql, ex, ij)
+}
+
+gdal_read_fids_ia <- function(dsn, layer, sql, ex, ia) {
+    .Call(`_dirigible_gdal_read_fids_ia`, dsn, layer, sql, ex, ia)
+}
+

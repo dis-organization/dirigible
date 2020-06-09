@@ -277,6 +277,50 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gdal_read_fids_all
+NumericVector gdal_read_fids_all(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex);
+RcppExport SEXP _dirigible_gdal_read_fids_all(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_read_fids_all(dsn, layer, sql, ex));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gdal_read_fids_ij
+NumericVector gdal_read_fids_ij(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, NumericVector ij);
+RcppExport SEXP _dirigible_gdal_read_fids_ij(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP ijSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ij(ijSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_read_fids_ij(dsn, layer, sql, ex, ij));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gdal_read_fids_ia
+NumericVector gdal_read_fids_ia(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, NumericVector ia);
+RcppExport SEXP _dirigible_gdal_read_fids_ia(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP iaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ia(iaSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_read_fids_ia(dsn, layer, sql, ex, ia));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_geometry_cpp_limit_skip", (DL_FUNC) &_dirigible_geometry_cpp_limit_skip, 7},
@@ -300,6 +344,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_raster_info_gdal_cpp", (DL_FUNC) &_dirigible_raster_info_gdal_cpp, 2},
     {"_dirigible_raster_gcp_gdal_cpp", (DL_FUNC) &_dirigible_raster_gcp_gdal_cpp, 1},
     {"_dirigible_raster_io_gdal_cpp", (DL_FUNC) &_dirigible_raster_io_gdal_cpp, 4},
+    {"_dirigible_gdal_read_fids_all", (DL_FUNC) &_dirigible_gdal_read_fids_all, 4},
+    {"_dirigible_gdal_read_fids_ij", (DL_FUNC) &_dirigible_gdal_read_fids_ij, 5},
+    {"_dirigible_gdal_read_fids_ia", (DL_FUNC) &_dirigible_gdal_read_fids_ia, 5},
     {NULL, NULL, 0}
 };
 

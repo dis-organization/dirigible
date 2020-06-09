@@ -17,7 +17,7 @@ List geometry_cpp_limit_skip(CharacterVector dsn, IntegerVector layer,
     Rcpp::stop("Open failed.\n");
   }
   OGRLayer *p_layer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
-  NumericVector native_fid = gdalgeometry::layer_read_fid(p_layer);
+  NumericVector native_fid = gdalgeometry::layer_read_fids_all(p_layer);
   int start = 0;
   int end = native_fid.length() - 1;
   if (skip_n[0] > 0) {  // silently ignore negative values
