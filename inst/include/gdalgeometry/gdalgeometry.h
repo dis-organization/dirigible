@@ -37,10 +37,13 @@ inline IntegerVector limit_skip_n_to_start_end_len(IntegerVector skip_n, Integer
   return  out;
 }
 
+
+/// READ FIDS ----------------------------------------------------------------------------
 inline NumericVector layer_read_fids_all(OGRLayer *poLayer) {
   double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
   NumericVector fids(nFeature);
+  std::fill( fids.begin(), fids.end(), NumericVector::get_na() );
   OGRFeature *poFeature;
   double ii = 0;
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
@@ -70,6 +73,7 @@ inline NumericVector layer_read_fids_ij(OGRLayer *poLayer, NumericVector ij) {
  // double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
   NumericVector fids(ij[1] - ij[0] + 1);
+  std::fill( fids.begin(), fids.end(), NumericVector::get_na() );
   OGRFeature *poFeature;
   double cnt = 0;
   double ii = 0;
@@ -110,6 +114,7 @@ inline NumericVector layer_read_fids_ia(OGRLayer *poLayer, NumericVector ia) {
   // double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
   NumericVector fids(ia.length());
+  std::fill( fids.begin(), fids.end(), NumericVector::get_na() );
   OGRFeature *poFeature;
   double ii = 0;
   double cnt = 0;
