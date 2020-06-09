@@ -321,6 +321,53 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gdal_dsn_read_geom_all
+List gdal_dsn_read_geom_all(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector format);
+RcppExport SEXP _dirigible_gdal_dsn_read_geom_all(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP formatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type format(formatSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_dsn_read_geom_all(dsn, layer, sql, ex, format));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gdal_dsn_read_geom_ij
+List gdal_dsn_read_geom_ij(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector format, NumericVector ij);
+RcppExport SEXP _dirigible_gdal_dsn_read_geom_ij(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP formatSEXP, SEXP ijSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type format(formatSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ij(ijSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_dsn_read_geom_ij(dsn, layer, sql, ex, format, ij));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gdal_dsn_read_geom_ia
+List gdal_dsn_read_geom_ia(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector format, NumericVector ia);
+RcppExport SEXP _dirigible_gdal_dsn_read_geom_ia(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP formatSEXP, SEXP iaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type format(formatSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ia(iaSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_dsn_read_geom_ia(dsn, layer, sql, ex, format, ia));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_geometry_cpp_limit_skip", (DL_FUNC) &_dirigible_geometry_cpp_limit_skip, 7},
@@ -347,6 +394,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_gdal_read_fids_all", (DL_FUNC) &_dirigible_gdal_read_fids_all, 4},
     {"_dirigible_gdal_read_fids_ij", (DL_FUNC) &_dirigible_gdal_read_fids_ij, 5},
     {"_dirigible_gdal_read_fids_ia", (DL_FUNC) &_dirigible_gdal_read_fids_ia, 5},
+    {"_dirigible_gdal_dsn_read_geom_all", (DL_FUNC) &_dirigible_gdal_dsn_read_geom_all, 5},
+    {"_dirigible_gdal_dsn_read_geom_ij", (DL_FUNC) &_dirigible_gdal_dsn_read_geom_ij, 6},
+    {"_dirigible_gdal_dsn_read_geom_ia", (DL_FUNC) &_dirigible_gdal_dsn_read_geom_ia, 6},
     {NULL, NULL, 0}
 };
 

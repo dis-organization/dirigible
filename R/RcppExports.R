@@ -97,3 +97,15 @@ gdal_read_fids_ia <- function(dsn, layer, sql, ex, ia) {
     .Call(`_dirigible_gdal_read_fids_ia`, dsn, layer, sql, ex, ia)
 }
 
+gdal_dsn_read_geom_all <- function(dsn, layer, sql, ex, format) {
+    .Call(`_dirigible_gdal_dsn_read_geom_all`, dsn, layer, sql, ex, format)
+}
+
+gdal_dsn_read_geom_ij <- function(dsn, layer, sql, ex, format, ij) {
+    .Call(`_dirigible_gdal_dsn_read_geom_ij`, dsn, layer, sql, ex, format, ij)
+}
+
+gdal_dsn_read_geom_ia <- function(dsn, layer, sql, ex, format, ia) {
+    .Call(`_dirigible_gdal_dsn_read_geom_ia`, dsn, layer, sql, ex, format, ia)
+}
+
