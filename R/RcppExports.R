@@ -109,3 +109,7 @@ gdal_dsn_read_geom_ia <- function(dsn, layer, sql, ex, format, ia) {
     .Call(`_dirigible_gdal_dsn_read_geom_ia`, dsn, layer, sql, ex, format, ia)
 }
 
+gdal_dsn_read_geom_fa <- function(dsn, layer, sql, ex, format, fa) {
+    .Call(`_dirigible_gdal_dsn_read_geom_fa`, dsn, layer, sql, ex, format, fa)
+}
+

@@ -44,3 +44,10 @@ List gdal_dsn_read_geom_ia(CharacterVector dsn, IntegerVector layer,
                            CharacterVector format, NumericVector ia) {
   return gdalgeometry::dsn_read_geom_ia(dsn, layer, sql, ex, format, ia);
 }
+
+// [[Rcpp::export]]
+List gdal_dsn_read_geom_fa(CharacterVector dsn, IntegerVector layer,
+                           CharacterVector sql, NumericVector ex,
+                           CharacterVector format, NumericVector fa) {
+  return gdalgeometry::dsn_read_geom_fa(dsn, layer, sql, ex, format, fa);
+}

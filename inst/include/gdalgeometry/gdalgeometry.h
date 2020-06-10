@@ -378,6 +378,54 @@ inline List dsn_read_geom_ia(CharacterVector dsn, IntegerVector layer,
 
 
 
+inline List layer_read_geom_fa(OGRLayer *poLayer, CharacterVector format, NumericVector fa) {
+  OGRFeature *poFeature;
+  OGRGeometry *poGeometry;
+  //poLayer->ResetReading();
+
+  List out(fa.length());
+
+  for (double ii = 0; ii < fa.length(); ii++) {
+    GIntBig feature_id = (GIntBig)fa[ii];
+      poFeature = poLayer->GetFeature(feature_id);
+      // work through format
+      // FIXME: get rid of "geometry"
+      if (format[0] == "wkb" | format[0] == "geometry") {
+        out[ii] = gdal_geometry_raw(poFeature);
+      }
+      if (format[0] == "wkt") {
+        out[ii] = gdal_geometry_wkt(poFeature);
+      }
+      // FIXME: maybe call it envelope not extent
+      if (format[0] == "extent") {
+        out[ii] = gdal_geometry_extent(poFeature);
+      }
+      // these are all just text variants (wkt uses a different mech)
+      if (format[0] == "gml" | format[0] == "json" | format[0] == "kml") {
+        out[ii] = gdal_geometry_txt(poFeature, format);
+      }
+
+    OGRFeature::DestroyFeature(poFeature);
+  }
+  return out;
+}
+
+inline List dsn_read_geom_fa(CharacterVector dsn, IntegerVector layer,
+                             CharacterVector sql, NumericVector ex,
+                             CharacterVector format, NumericVector fa) {
+
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer *poLayer = gdalheaders::gdal_layer(poDS, layer, sql = sql, ex =  ex);
+  List out = layer_read_geom_fa(poLayer, format, fa);
+  GDALClose(poDS);
+  return out;
+}
+
 /// --------------------------------------------------------------------------------------
 
 
