@@ -51,3 +51,10 @@ List gdal_dsn_read_geom_fa(CharacterVector dsn, IntegerVector layer,
                            CharacterVector format, NumericVector fa) {
   return gdalgeometry::dsn_read_geom_fa(dsn, layer, sql, ex, format, fa);
 }
+
+// [[Rcpp::export]]
+List gdal_dsn_read_fields_all(CharacterVector dsn, IntegerVector layer,
+                           CharacterVector sql, NumericVector ex,
+                           CharacterVector fid_column_name) {
+  return gdalgeometry::dsn_read_fields_all(dsn, layer, sql, ex, fid_column_name);
+}

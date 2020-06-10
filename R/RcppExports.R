@@ -113,3 +113,7 @@ gdal_dsn_read_geom_fa <- function(dsn, layer, sql, ex, format, fa) {
     .Call(`_dirigible_gdal_dsn_read_geom_fa`, dsn, layer, sql, ex, format, fa)
 }
 
+gdal_dsn_read_fields_all <- function(dsn, layer, sql, ex, fid_column_name) {
+    .Call(`_dirigible_gdal_dsn_read_fields_all`, dsn, layer, sql, ex, fid_column_name)
+}
+
