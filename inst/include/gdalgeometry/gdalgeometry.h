@@ -41,16 +41,16 @@ inline IntegerVector limit_skip_n_to_start_end_len(IntegerVector skip_n, Integer
 inline NumericVector layer_read_fids_all(OGRLayer *poLayer) {
   double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
-  NumericVector fids(nFeature);
-  std::fill( fids.begin(), fids.end(), NumericVector::get_na() );
+  NumericVector out(nFeature);
+  std::fill( out.begin(), out.end(), NumericVector::get_na() );
   OGRFeature *poFeature;
   double ii = 0;
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
-   fids[ii] = poFeature->GetFID();
+   out[ii] = poFeature->GetFID();
    OGRFeature::DestroyFeature(poFeature);
    ii++;
   }
-  return fids;
+  return out;
 }
 
 inline NumericVector dsn_read_fids_all(CharacterVector dsn, IntegerVector layer,
@@ -69,27 +69,25 @@ inline NumericVector dsn_read_fids_all(CharacterVector dsn, IntegerVector layer,
 }
 
 inline NumericVector layer_read_fids_ij(OGRLayer *poLayer, NumericVector ij) {
- // double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
-
-  NumericVector fids(ij[1] - ij[0] + 1);
-  std::fill( fids.begin(), fids.end(), NumericVector::get_na() );
+  NumericVector out(ij[1] - ij[0] + 1);
+  std::fill( out.begin(), out.end(), NumericVector::get_na() );
   OGRFeature *poFeature;
   double cnt = 0;
   double ii = 0;
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
     if (ii == ij[0] || (ii > ij[0] && ii <= ij[1])) {
-      fids[cnt] = poFeature->GetFID();
+      out[cnt] = poFeature->GetFID();
       cnt++;
     }
     ii++;
     OGRFeature::DestroyFeature(poFeature);
   }
-  if (cnt < fids.length()) {
+  if (cnt < out.length()) {
     Rcpp::warning("not as many FIDs as requested");
   }
 
 
-  return fids;
+  return out;
 }
 
 inline NumericVector dsn_read_fids_ij(CharacterVector dsn, IntegerVector layer,
@@ -110,25 +108,24 @@ inline NumericVector dsn_read_fids_ij(CharacterVector dsn, IntegerVector layer,
 
 
 inline NumericVector layer_read_fids_ia(OGRLayer *poLayer, NumericVector ia) {
-  // double   nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
-  NumericVector fids(ia.length());
-  std::fill( fids.begin(), fids.end(), NumericVector::get_na() );
+  NumericVector out(ia.length());
+  std::fill( out.begin(), out.end(), NumericVector::get_na() );
   OGRFeature *poFeature;
   double ii = 0;
   double cnt = 0;
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
     if (ii == ia[cnt]) {
-      fids[cnt] = poFeature->GetFID();
+      out[cnt] = poFeature->GetFID();
       cnt++;
     }
     ii++;
     OGRFeature::DestroyFeature(poFeature);
   }
-  if (cnt < fids.length()) {
+  if (cnt < out.length()) {
     Rcpp::warning("not all FIDS found");
   }
-  return fids;
+  return out;
 }
 
 inline NumericVector dsn_read_fids_ia(CharacterVector dsn, IntegerVector layer,
@@ -225,30 +222,30 @@ inline List layer_read_geom_all(OGRLayer *poLayer, CharacterVector format) {
   poLayer->ResetReading();
   int nFeature = gdalheaders::force_layer_feature_count(poLayer);
 
-  List feature_xx(nFeature);
-  double iter = 0;
+  List out(nFeature);
+  double ii = 0;
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
     // work through format
     // FIXME: get rid of "geometry"
     if (format[0] == "wkb" | format[0] == "geometry") {
-      feature_xx[iter] = gdal_geometry_raw(poFeature);
+      out[ii] = gdal_geometry_raw(poFeature);
     }
     if (format[0] == "wkt") {
-      feature_xx[iter] = gdal_geometry_wkt(poFeature);
+      out[ii] = gdal_geometry_wkt(poFeature);
     }
     // FIXME: maybe call it envelope not extent
     if (format[0] == "extent") {
-      feature_xx[iter] = gdal_geometry_extent(poFeature);
+      out[ii] = gdal_geometry_extent(poFeature);
     }
     // these are all just text variants (wkt uses a different mech)
     if (format[0] == "gml" | format[0] == "json" | format[0] == "kml") {
-      feature_xx[iter] = gdal_geometry_txt(poFeature, format);
+      out[ii] = gdal_geometry_txt(poFeature, format);
     }
 
     OGRFeature::DestroyFeature(poFeature);
-    iter++;
+    ii++;
   }
-  return feature_xx;
+  return out;
 }
 
 inline List dsn_read_geom_all(CharacterVector dsn, IntegerVector layer,
@@ -276,7 +273,7 @@ inline List layer_read_geom_ij(OGRLayer *poLayer, CharacterVector format, Numeri
   OGRGeometry *poGeometry;
   poLayer->ResetReading();
   int nFeature = ij[1] - ij[0] + 1;
-  List feature_xx(nFeature);
+  List out(nFeature);
   double ii = 0;
   double cnt = 0;
   while( (poFeature = poLayer->GetNextFeature()) != NULL ) {
@@ -285,18 +282,18 @@ inline List layer_read_geom_ij(OGRLayer *poLayer, CharacterVector format, Numeri
       // work through format
       // FIXME: get rid of "geometry"
       if (format[0] == "wkb" | format[0] == "geometry") {
-        feature_xx[cnt] = gdal_geometry_raw(poFeature);
+        out[cnt] = gdal_geometry_raw(poFeature);
       }
       if (format[0] == "wkt") {
-        feature_xx[cnt] = gdal_geometry_wkt(poFeature);
+        out[cnt] = gdal_geometry_wkt(poFeature);
       }
       // FIXME: maybe call it envelope not extent
       if (format[0] == "extent") {
-        feature_xx[cnt] = gdal_geometry_extent(poFeature);
+        out[cnt] = gdal_geometry_extent(poFeature);
       }
       // these are all just text variants (wkt uses a different mech)
       if (format[0] == "gml" | format[0] == "json" | format[0] == "kml") {
-        feature_xx[cnt] = gdal_geometry_txt(poFeature, format);
+        out[cnt] = gdal_geometry_txt(poFeature, format);
       }
       cnt++;
 
@@ -304,7 +301,7 @@ inline List layer_read_geom_ij(OGRLayer *poLayer, CharacterVector format, Numeri
     ii++;
     OGRFeature::DestroyFeature(poFeature);
   }
-  return feature_xx;
+  return out;
 }
 
 inline List dsn_read_geom_ij(CharacterVector dsn, IntegerVector layer,
@@ -331,7 +328,7 @@ inline List layer_read_geom_ia(OGRLayer *poLayer, CharacterVector format, Numeri
   OGRGeometry *poGeometry;
   poLayer->ResetReading();
 
-  List feature_xx(ia.length());
+  List out(ia.length());
   double ii = 0;
   double cnt = 0;
 
@@ -341,18 +338,18 @@ inline List layer_read_geom_ia(OGRLayer *poLayer, CharacterVector format, Numeri
       // work through format
       // FIXME: get rid of "geometry"
       if (format[0] == "wkb" | format[0] == "geometry") {
-        feature_xx[cnt] = gdal_geometry_raw(poFeature);
+        out[cnt] = gdal_geometry_raw(poFeature);
       }
       if (format[0] == "wkt") {
-        feature_xx[cnt] = gdal_geometry_wkt(poFeature);
+        out[cnt] = gdal_geometry_wkt(poFeature);
       }
       // FIXME: maybe call it envelope not extent
       if (format[0] == "extent") {
-        feature_xx[cnt] = gdal_geometry_extent(poFeature);
+        out[cnt] = gdal_geometry_extent(poFeature);
       }
       // these are all just text variants (wkt uses a different mech)
       if (format[0] == "gml" | format[0] == "json" | format[0] == "kml") {
-        feature_xx[cnt] = gdal_geometry_txt(poFeature, format);
+        out[cnt] = gdal_geometry_txt(poFeature, format);
       }
       cnt++;
 
@@ -360,7 +357,7 @@ inline List layer_read_geom_ia(OGRLayer *poLayer, CharacterVector format, Numeri
     ii++;
     OGRFeature::DestroyFeature(poFeature);
   }
-  return feature_xx;
+  return out;
 }
 
 inline List dsn_read_geom_ia(CharacterVector dsn, IntegerVector layer,
