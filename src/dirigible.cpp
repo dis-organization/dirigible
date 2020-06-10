@@ -21,13 +21,17 @@ List geometry_cpp_limit_skip(CharacterVector dsn, IntegerVector layer,
   ij[0] = skip_n[0];
   ij[1] = skip_n[0] + limit_n[0] - 1;
   List g_list = gdalgeometry::layer_read_geom_ij(p_layer, format, ij);
+  // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
+  if (sql[0] != "") {
+    poDS->ReleaseResultSet(p_layer);
+  }
   return g_list;
 }
 
 // [[Rcpp::export]]
 List geometry_cpp(CharacterVector dsn, IntegerVector layer,
                   CharacterVector sql, NumericVector ex,
-                  IntegerVector fid, CharacterVector format) {
+                   CharacterVector format, NumericVector fid) {
   GDALDataset       *poDS;
   poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
   if( poDS == NULL )
@@ -35,7 +39,11 @@ List geometry_cpp(CharacterVector dsn, IntegerVector layer,
     Rcpp::stop("Open failed.\n");
   }
   OGRLayer *p_layer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
-  List g_list = gdalgeometry::gdal_geometry_(p_layer, fid, format);
+  List g_list = gdalgeometry::layer_read_geom_fa(p_layer, format, fid);
+  // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
+  if (sql[0] != "") {
+    poDS->ReleaseResultSet(p_layer);
+  }
   GDALClose(poDS);
   return g_list;
 }

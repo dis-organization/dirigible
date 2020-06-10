@@ -5,8 +5,8 @@ geometry_cpp_limit_skip <- function(dsn, layer, sql, ex, format, limit_n, skip_n
     .Call(`_dirigible_geometry_cpp_limit_skip`, dsn, layer, sql, ex, format, limit_n, skip_n)
 }
 
-geometry_cpp <- function(dsn, layer, sql, ex, fid, format) {
-    .Call(`_dirigible_geometry_cpp`, dsn, layer, sql, ex, fid, format)
+geometry_cpp <- function(dsn, layer, sql, ex, format, fid) {
+    .Call(`_dirigible_geometry_cpp`, dsn, layer, sql, ex, format, fid)
 }
 
 register_gdal_cpp <- function() {

@@ -563,54 +563,6 @@ inline List dsn_read_fields_ij(CharacterVector dsn, IntegerVector layer,
 }
 // -----------------------------------------------------------------------------------------
 
-inline List gdal_geometry_(OGRLayer *poLayer,
-                           IntegerVector fid,
-                           CharacterVector format)
-{
-
-  OGRFeature *poFeature;
-  OGRGeometry *poGeometry;
-  poLayer->ResetReading();
-  int len = fid.length();
-  List feature_xx(len);
-
- // int nFeature = gdalheaders::force_layer_feature_count(poLayer);
-  bool was_bad = false;
-  for (int iter = 0; iter < fid.length(); iter++) {
-    GIntBig feature_id = (GIntBig)fid[iter];
-    poFeature = poLayer->GetFeature(feature_id);
-    if (!was_bad & (NULL == poFeature)) {
-      was_bad = true;
-    } else {
-      // work through format
-      // FIXME: get rid of "geometry"
-      if (format[0] == "wkb" | format[0] == "geometry") {
-        feature_xx[iter] = gdal_geometry_raw(poFeature);
-      }
-      if (format[0] == "wkt") {
-        feature_xx[iter] = gdal_geometry_wkt(poFeature);
-      }
-      // FIXME: maybe call it envelope not extent
-      if (format[0] == "extent") {
-        feature_xx[iter] = gdal_geometry_extent(poFeature);
-      }
-      // these are all just text variants (wkt uses a different mech)
-      if (format[0] == "gml" | format[0] == "json" | format[0] == "kml") {
-        feature_xx[iter] = gdal_geometry_txt(poFeature, format);
-      }
-
-      OGRFeature::DestroyFeature(poFeature);
-    }
-
-
-  }
-  if (was_bad) {
-    Rprintf("(at least one) fid value not found, or Feature invalid: some elements NULL\n");
-
-  }
-  return feature_xx;
-}
-
 
 inline List layer_read_fields_ia(OGRLayer *poLayer, CharacterVector fid_column_name,
                                  NumericVector ia) {
