@@ -17,37 +17,10 @@ List geometry_cpp_limit_skip(CharacterVector dsn, IntegerVector layer,
     Rcpp::stop("Open failed.\n");
   }
   OGRLayer *p_layer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
-  NumericVector native_fid = gdalgeometry::layer_read_fids_all(p_layer);
-  int start = 0;
-  int end = native_fid.length() - 1;
-  if (skip_n[0] > 0) {  // silently ignore negative values
-    start = skip_n[0];
-  }
-  if (limit_n[0] > 0) { // silently ignore negative values
-    end = start + limit_n[0] - 1;
-  }
-  if (start >= native_fid.length()) {
-    Rcpp::stop("skip_n skips all available features");
-  }
-  if (end > native_fid.length()) {
-    if (start > 0) {
-      Rcpp::warning("limit_n is greater than the number of available features (given 'skip_n')");
-    } else {
-      Rcpp::warning("limit_n is greater than the number of available features");
-    }
-    end = native_fid.length() - 1;
-  }
-  int len = end - start + 1;
-  // Rprintf("start = %i\n", (int)start);
-  // Rprintf("end = %i\n", (int)end);
-  // Rprintf("len = %i\n", (int)len);
-
-  IntegerVector fid(len);
-  for (int ii = start; ii <= end; ii++) {
-    fid[ii] = native_fid[ii];
-  }
-
-  List g_list = gdalgeometry::gdal_geometry_(p_layer, fid, format);
+  NumericVector ij(2);
+  ij[0] = skip_n[0];
+  ij[1] = skip_n[0] + limit_n[0] - 1;
+  List g_list = gdalgeometry::layer_read_geom_ij(p_layer, format, ij);
   return g_list;
 }
 
