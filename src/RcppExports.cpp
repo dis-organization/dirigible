@@ -399,6 +399,54 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gdal_dsn_read_fields_ij
+List gdal_dsn_read_fields_ij(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector fid_column_name, NumericVector ij);
+RcppExport SEXP _dirigible_gdal_dsn_read_fields_ij(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP fid_column_nameSEXP, SEXP ijSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type fid_column_name(fid_column_nameSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ij(ijSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_dsn_read_fields_ij(dsn, layer, sql, ex, fid_column_name, ij));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gdal_dsn_read_fields_ia
+List gdal_dsn_read_fields_ia(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector fid_column_name, NumericVector ia);
+RcppExport SEXP _dirigible_gdal_dsn_read_fields_ia(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP fid_column_nameSEXP, SEXP iaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type fid_column_name(fid_column_nameSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ia(iaSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_dsn_read_fields_ia(dsn, layer, sql, ex, fid_column_name, ia));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gdal_dsn_read_fields_fa
+List gdal_dsn_read_fields_fa(CharacterVector dsn, IntegerVector layer, CharacterVector sql, NumericVector ex, CharacterVector fid_column_name, NumericVector fa);
+RcppExport SEXP _dirigible_gdal_dsn_read_fields_fa(SEXP dsnSEXP, SEXP layerSEXP, SEXP sqlSEXP, SEXP exSEXP, SEXP fid_column_nameSEXP, SEXP faSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type sql(sqlSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ex(exSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type fid_column_name(fid_column_nameSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type fa(faSEXP);
+    rcpp_result_gen = Rcpp::wrap(gdal_dsn_read_fields_fa(dsn, layer, sql, ex, fid_column_name, fa));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_geometry_cpp_limit_skip", (DL_FUNC) &_dirigible_geometry_cpp_limit_skip, 7},
@@ -430,6 +478,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dirigible_gdal_dsn_read_geom_ia", (DL_FUNC) &_dirigible_gdal_dsn_read_geom_ia, 6},
     {"_dirigible_gdal_dsn_read_geom_fa", (DL_FUNC) &_dirigible_gdal_dsn_read_geom_fa, 6},
     {"_dirigible_gdal_dsn_read_fields_all", (DL_FUNC) &_dirigible_gdal_dsn_read_fields_all, 5},
+    {"_dirigible_gdal_dsn_read_fields_ij", (DL_FUNC) &_dirigible_gdal_dsn_read_fields_ij, 6},
+    {"_dirigible_gdal_dsn_read_fields_ia", (DL_FUNC) &_dirigible_gdal_dsn_read_fields_ia, 6},
+    {"_dirigible_gdal_dsn_read_fields_fa", (DL_FUNC) &_dirigible_gdal_dsn_read_fields_fa, 6},
     {NULL, NULL, 0}
 };
 

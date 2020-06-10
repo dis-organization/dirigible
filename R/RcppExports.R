@@ -117,3 +117,15 @@ gdal_dsn_read_fields_all <- function(dsn, layer, sql, ex, fid_column_name) {
     .Call(`_dirigible_gdal_dsn_read_fields_all`, dsn, layer, sql, ex, fid_column_name)
 }
 
+gdal_dsn_read_fields_ij <- function(dsn, layer, sql, ex, fid_column_name, ij) {
+    .Call(`_dirigible_gdal_dsn_read_fields_ij`, dsn, layer, sql, ex, fid_column_name, ij)
+}
+
+gdal_dsn_read_fields_ia <- function(dsn, layer, sql, ex, fid_column_name, ia) {
+    .Call(`_dirigible_gdal_dsn_read_fields_ia`, dsn, layer, sql, ex, fid_column_name, ia)
+}
+
+gdal_dsn_read_fields_fa <- function(dsn, layer, sql, ex, fid_column_name, fa) {
+    .Call(`_dirigible_gdal_dsn_read_fields_fa`, dsn, layer, sql, ex, fid_column_name, fa)
+}
+

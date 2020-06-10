@@ -58,3 +58,29 @@ List gdal_dsn_read_fields_all(CharacterVector dsn, IntegerVector layer,
                            CharacterVector fid_column_name) {
   return gdalgeometry::dsn_read_fields_all(dsn, layer, sql, ex, fid_column_name);
 }
+
+// [[Rcpp::export]]
+List gdal_dsn_read_fields_ij(CharacterVector dsn, IntegerVector layer,
+                              CharacterVector sql, NumericVector ex,
+                              CharacterVector fid_column_name,
+                              NumericVector ij) {
+  return gdalgeometry::dsn_read_fields_ij(dsn, layer, sql, ex, fid_column_name, ij);
+}
+
+
+// [[Rcpp::export]]
+List gdal_dsn_read_fields_ia(CharacterVector dsn, IntegerVector layer,
+                             CharacterVector sql, NumericVector ex,
+                             CharacterVector fid_column_name,
+                             NumericVector ia) {
+  return gdalgeometry::dsn_read_fields_ia(dsn, layer, sql, ex, fid_column_name, ia);
+}
+
+
+// [[Rcpp::export]]
+List gdal_dsn_read_fields_fa(CharacterVector dsn, IntegerVector layer,
+                             CharacterVector sql, NumericVector ex,
+                             CharacterVector fid_column_name,
+                             NumericVector fa) {
+  return gdalgeometry::dsn_read_fields_fa(dsn, layer, sql, ex, fid_column_name, fa);
+}
