@@ -4,11 +4,40 @@
 #include "gdalgeometry/gdalgeometry.h"
 using namespace Rcpp;
 
+
+
+// [[Rcpp::export]]
+List geometry_cpp_limit_skip(CharacterVector dsn, IntegerVector layer,
+                  CharacterVector sql, NumericVector ex, CharacterVector format,
+                  IntegerVector limit_n, IntegerVector skip_n) {
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer *p_layer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
+  NumericVector ij(2);
+  ij[0] = skip_n[0];
+  ij[1] = skip_n[0] + limit_n[0] - 1;
+  List g_list = gdalgeometry::layer_read_geom_ij(p_layer, format, ij);
+  return g_list;
+}
+
 // [[Rcpp::export]]
 List geometry_cpp(CharacterVector dsn, IntegerVector layer,
                   CharacterVector sql, NumericVector ex,
                   IntegerVector fid, CharacterVector format) {
-  return gdalgeometry::gdal_geometry_(dsn, layer, sql, ex, fid, format);
+  GDALDataset       *poDS;
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  if( poDS == NULL )
+  {
+    Rcpp::stop("Open failed.\n");
+  }
+  OGRLayer *p_layer = gdalheaders::gdal_layer(poDS, layer, sql, ex);
+  List g_list = gdalgeometry::gdal_geometry_(p_layer, fid, format);
+  GDALClose(poDS);
+  return g_list;
 }
 // [[Rcpp::export]]
 LogicalVector register_gdal_cpp() {

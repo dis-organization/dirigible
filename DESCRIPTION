@@ -18,3 +18,9 @@ LinkingTo:
     Rcpp
 Imports: 
     Rcpp
+Suggests: 
+    testthat,
+    vapour,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

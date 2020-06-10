@@ -3,3 +3,4 @@
 .RData
 autom4te.cache
 config.*
+inst/doc
