@@ -1,0 +1,44 @@
+<VRTDataset rasterXSize="33554432" rasterYSize="33554432" subClass="VRTWarpedDataset">
+  <SRS dataAxisToSRSAxisMapping="1,2">PROJCS["Google Maps Global Mercator (deprecated)",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Mercator_1SP"],PARAMETER["central_meridian",0],PARAMETER["scale_factor",1],PARAMETER["false_easting",0],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],EXTENSION["PROJ4","+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs"],AUTHORITY["EPSG","900913"]]</SRS>
+  <GeoTransform> -2.0037508340000000e+07,  1.1943285667896271e+00,  0.0000000000000000e+00,  2.0037508340000000e+07,  0.0000000000000000e+00, -1.1943285667896271e+00</GeoTransform>
+  <Metadata>
+    <MDI key="CACHE_PATH">./gdalwmscache/10ef1599b854f424604074e0c40cd573</MDI>
+  </Metadata>
+  <VRTRasterBand dataType="Byte" band="1" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Red</ColorInterp>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Byte" band="2" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Green</ColorInterp>
+  </VRTRasterBand>
+  <VRTRasterBand dataType="Byte" band="3" subClass="VRTWarpedRasterBand">
+    <ColorInterp>Blue</ColorInterp>
+  </VRTRasterBand>
+  <BlockXSize>512</BlockXSize>
+  <BlockYSize>128</BlockYSize>
+  <GDALWarpOptions>
+    <WarpMemoryLimit>6.71089e+07</WarpMemoryLimit>
+    <ResampleAlg>NearestNeighbour</ResampleAlg>
+    <WorkingDataType>Byte</WorkingDataType>
+    <Option name="INIT_DEST">0</Option>
+    <Option name="ERROR_OUT_IF_EMPTY_SOURCE_WINDOW">FALSE</Option>
+    <SourceDataset relativeToVRT="0">/perm_storage/home/data/r_tmp/RtmppnSp4l/file6031f87474c.xml</SourceDataset>
+    <Transformer>
+      <ApproxTransformer>
+        <MaxError>0.125</MaxError>
+        <BaseTransformer>
+          <GenImgProjTransformer>
+            <SrcGeoTransform>-20037508.3399999999,1.19432856678962707,0,20037508.3399999999,0,-1.19432856678962707</SrcGeoTransform>
+            <SrcInvGeoTransform>16777216,0.837290531104028513,0,16777216,0,-0.837290531104028513</SrcInvGeoTransform>
+            <DstGeoTransform>-20037508.3399999999,1.19432856678962707,0,20037508.3399999999,0,-1.19432856678962707</DstGeoTransform>
+            <DstInvGeoTransform>16777216,0.837290531104028513,0,16777216,0,-0.837290531104028513</DstInvGeoTransform>
+          </GenImgProjTransformer>
+        </BaseTransformer>
+      </ApproxTransformer>
+    </Transformer>
+    <BandList>
+      <BandMapping src="1" dst="1" />
+      <BandMapping src="2" dst="2" />
+      <BandMapping src="3" dst="3" />
+    </BandList>
+  </GDALWarpOptions>
+</VRTDataset>
