@@ -13,10 +13,15 @@
 
 #include "cpl_conv.h" // for CPLMalloc()
 
+//#include "opt.h"
+
+//inline std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = true);
+
 namespace gdalwarpmem{
+
+
 using namespace Rcpp;
 
-std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = true);
 
 inline List gdal_warp_in_memory(CharacterVector source_filename,
                      CharacterVector source_WKT,
@@ -35,7 +40,7 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   // Open input and output files.
   GDALAllRegister();
   Rcpp::CharacterVector oo;
-  std::vector <char *> oo_char = create_options(oo, true); // open options
+  std::vector <char *> oo_char; // = create_options(oo, true); // open options
 
 //  hSrcDS = GDALOpenEx( source_filename[0], GA_ReadOnly, NULL, oo_char.data(), NULL );
 
@@ -65,6 +70,8 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   // Create the output file.
   hDstDS = GDALCreate( hDriver, "", target_dim[0], target_dim[1],
                        GDALGetRasterCount(po_SrcDS[0]), eDT, NULL );
+
+
   CPLAssert( hDstDS != NULL );
 
   // Write out the projection definition.
@@ -74,10 +81,12 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   GDALSetGeoTransform( hDstDS, GeoTransform );
 
   Rcpp::CharacterVector options;
-  std::vector <char *> options_char = create_options(options, true);
+  std::vector <char *> options_char; //create_options(options, true);
   GDALWarpAppOptions* psOptions = GDALWarpAppOptionsNew(options_char.data(), NULL);
 
-  GDALDatasetH hOutDS = GDALWarp(NULL, hDstDS, 1, po_SrcDS.data(), psOptions, FALSE);
+
+  int err_0 = 0;
+  GDALDatasetH hOutDS = GDALWarp(NULL, hDstDS, 1, po_SrcDS.data(), psOptions, &err_0);
 
 
   // // Establish reprojection transformer.
@@ -99,28 +108,28 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   // GDALDestroyWarpOptions( psWarpOptions );
   //
 
-  // double *double_scanline;
-  // double_scanline = (double *) CPLMalloc(sizeof(double)*
-  //   static_cast<unsigned long>(target_dim[0])*
-  //   static_cast<unsigned long>(target_dim[1]));
+   double *double_scanline;
+  double_scanline = (double *) CPLMalloc(sizeof(double)*
+     static_cast<unsigned long>(target_dim[0])*
+     static_cast<unsigned long>(target_dim[1]));
   // //GDALRasterIOExtraArg psExtraArg;
   // //INIT_RASTERIO_EXTRA_ARG(psExtraArg);
   //
   //
-  // CPLErr err;
-  // dstBand = GDALGetRasterBand(hDstDS, band[0]);
-  //
-  // err = GDALRasterIO(dstBand,  GF_Read, 0, 0, target_dim[0], target_dim[1],
-  //                    double_scanline, target_dim[0], target_dim[1], GDT_Float64,
-  //                    0, 0);
+  CPLErr err;
+  dstBand = GDALGetRasterBand(hOutDS, band[0]);
+
+   err = GDALRasterIO(dstBand,  GF_Read, 0, 0, target_dim[0], target_dim[1],
+                      double_scanline, target_dim[0], target_dim[1], GDT_Float64,
+                      0, 0);
   NumericVector res(target_dim[0] * target_dim[1]);
-  // for (int i = 0; i < (target_dim[0] * target_dim[1]); i++) {
-  //   //  if (((float)double_scanline[i] == (float)no_data) || ISNAN(double_scanline[i])) {
-  //   //    res[i] = NA_REAL;
-  //   //  } else {
-  //   res[i] = double_scanline[i];
-  //   //  }
-  // }
+  for (int i = 0; i < (target_dim[0] * target_dim[1]); i++) {
+    //  if (((float)double_scanline[i] == (float)no_data) || ISNAN(double_scanline[i])) {
+    //    res[i] = NA_REAL;
+    //  } else {
+    res[i] = double_scanline[i];
+    //  }
+  }
 
   GDALClose( hDstDS );
   GDALClose( po_SrcDS[0] );
