@@ -69,8 +69,8 @@ sds_list_gdal_cpp <- function(dsn) {
     .Call(`_dirigible_sds_list_gdal_cpp`, dsn)
 }
 
-warp_in_memory_gdal_cpp <- function(dsn, source_WKT, target_WKT, target_geotransform, target_dim, band) {
-    .Call(`_dirigible_warp_in_memory_gdal_cpp`, dsn, source_WKT, target_WKT, target_geotransform, target_dim, band)
+warp_in_memory_gdal_cpp <- function(dsn, source_WKT, target_WKT, target_geotransform, target_dim, band, output_filename = "", driver_shortname = "") {
+    .Call(`_dirigible_warp_in_memory_gdal_cpp`, dsn, source_WKT, target_WKT, target_geotransform, target_dim, band, output_filename, driver_shortname)
 }
 
 raster_info_gdal_cpp <- function(dsn, min_max) {

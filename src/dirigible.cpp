@@ -157,13 +157,17 @@ List warp_in_memory_gdal_cpp(CharacterVector dsn,
                              CharacterVector target_WKT,
                              NumericVector target_geotransform,
                              IntegerVector target_dim,
-                             IntegerVector band) {
+                             IntegerVector band,
+                             CharacterVector output_filename = "",
+                             CharacterVector driver_shortname = "") {
 return gdalwarpmem::gdal_warp_in_memory(dsn,
                     source_WKT,
                     target_WKT,
                     target_geotransform,
                     target_dim,
-                    band);
+                    band,
+                    output_filename,
+                    driver_shortname);
 }
 // [[Rcpp::export]]
 List raster_info_gdal_cpp(CharacterVector dsn, LogicalVector min_max) {

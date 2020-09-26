@@ -7,6 +7,7 @@
 #include "gdal_priv.h"
 #include "gdalwarper.h"
 #include "gdal_utils.h"
+#include <string.h> // string compare to ""
 //#include "gdal_version.h"
 
 #include "cpl_conv.h" // for CPLMalloc()
@@ -23,7 +24,9 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
                      CharacterVector target_WKT,
                      NumericVector target_geotransform,
                      IntegerVector target_dim,
-                     IntegerVector band) {
+                     IntegerVector band,
+                     CharacterVector output_filename = "",
+                     CharacterVector driver_shortname = "") {
 
 
   // TODO
@@ -66,11 +69,16 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   // Create output with same datatype as first input band.
   poBand = GDALGetRasterBand(po_SrcDS[0], 1);
   eDT = GDALGetRasterDataType(poBand);
+
+  if (strlen(output_filename[0]) < 1) {
+    driver_shortname[0] = "MEM";
+
+  }
   // Get output driver
-  hDriver = GDALGetDriverByName( "MEM" );
+  hDriver = GDALGetDriverByName( driver_shortname[0] );
 
   // Create the output data set.
-  hDstDS = GDALCreate( hDriver, "", target_dim[0], target_dim[1],
+  hDstDS = GDALCreate( hDriver, output_filename[0], target_dim[0], target_dim[1],
                        GDALGetRasterCount(po_SrcDS[0]), eDT, NULL );
 
   CPLAssert( hDstDS != NULL );
@@ -89,14 +97,25 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   GDALDatasetH hOutDS = GDALWarp(NULL, hDstDS, 1, po_SrcDS.data(), psOptions, &err_0);
 
 
+  Rcpp::List outlist(band.size());
+
+  if (strlen(output_filename[0]) > 0) {
+    GDALClose( hDstDS );
+    for (int i = 0; i < source_filename.size(); i++) {
+      GDALClose( po_SrcDS[i] );
+    }
+    return outlist;
+  }
    double *double_scanline;
    double_scanline = (double *) CPLMalloc(sizeof(double)*
      static_cast<unsigned long>(target_dim[0])*
      static_cast<unsigned long>(target_dim[1]));
 
+
+
+
   CPLErr err;
 
-  Rcpp::List outlist(band.size());
 
   for (int iband = 0; iband < band.size(); iband++) {
     dstBand = GDALGetRasterBand(hOutDS, band[iband]);
@@ -115,7 +134,7 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   for (int i = 0; i < source_filename.size(); i++) {
    GDALClose( po_SrcDS[i] );
   }
-
+  CPLFree(double_scanline);
   return outlist;
 }
 

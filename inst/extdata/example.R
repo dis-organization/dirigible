@@ -47,3 +47,29 @@ plotRGB(brick(r0, g0, b0))
 
 plotRGB(w1)
 plotRGB(w2)
+
+
+filename <- f
+target <- r1
+band <- NA_integer_
+scr_wkt = ""
+
+if (!is.character(filename) || nchar(filename) < 1) {
+  stop("'filename' must be a valid file path, or url, or GDAL data source string")
+}
+gt <- affinity:::raster_to_gt(target)   ## hypertidy/affinity
+dm <- dim(target)[2:1]
+wkt <- sf::st_crs(raster::projection(target))$wkt
+if (anyNA(band)) {
+  info <- dirigible:::raster_info_gdal_cpp(filename, min_max = FALSE)
+  band <- seq_len(info$bands)
+}
+dirigible:::warp_in_memory_gdal_cpp(filename, source_WKT = src_wkt,
+                                    target_geotransform = gt,
+                                    target_dim = dm,
+                                    target_WKT = wkt,
+                                    band = band,
+                                    output_filename = "out.tif",
+                                    driver_shortname = "GTiff")
+
+
