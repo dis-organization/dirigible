@@ -27,13 +27,14 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
 
 
   // TODO
-  // multiple bands
-  // DONE (or band selection)
+  // resample algorithm (options)
   // data type (see paleolimbot/pkd ?)
   // options options options
   // correct treatment of multiple input source_filename
   // set NODATA
   // allow choice of driver, output file
+  // DONE multiple bands
+  // DONE band selection
   std::vector<GDALDatasetH> po_SrcDS(source_filename.size());
 
   GDALDatasetH hDstDS;
@@ -94,22 +95,26 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
      static_cast<unsigned long>(target_dim[1]));
 
   CPLErr err;
-  dstBand = GDALGetRasterBand(hOutDS, band[0]);
 
-   err = GDALRasterIO(dstBand,  GF_Read, 0, 0, target_dim[0], target_dim[1],
+  Rcpp::List outlist(band.size());
+
+  for (int iband = 0; iband < band.size(); iband++) {
+    dstBand = GDALGetRasterBand(hOutDS, band[iband]);
+
+     err = GDALRasterIO(dstBand,  GF_Read, 0, 0, target_dim[0], target_dim[1],
                       double_scanline, target_dim[0], target_dim[1], GDT_Float64,
                       0, 0);
-  NumericVector res(target_dim[0] * target_dim[1]);
-  for (int i = 0; i < (target_dim[0] * target_dim[1]); i++) {
-    res[i] = double_scanline[i];
-  }
+    NumericVector res(target_dim[0] * target_dim[1]);
+    for (int i = 0; i < (target_dim[0] * target_dim[1]); i++) {
+      res[i] = double_scanline[i];
+    }
+    outlist[iband] = res;
 
+  }
   GDALClose( hDstDS );
   for (int i = 0; i < source_filename.size(); i++) {
    GDALClose( po_SrcDS[i] );
   }
-  Rcpp::List outlist(1);  //hardcode to 1 for now
-  outlist[0] = res;
 
   return outlist;
 }
