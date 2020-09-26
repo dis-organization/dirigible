@@ -115,6 +115,7 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   for (int i = 0; i < source_filename.size(); i++) {
    GDALClose( po_SrcDS[i] );
   }
+  CPLFree(double_scanline);
 
   return outlist;
 }
