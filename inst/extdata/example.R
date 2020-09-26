@@ -10,7 +10,7 @@ warp <- function(filename, target, ..., band = NA_integer_, src_wkt = "") {
   if (!is.character(filename) || nchar(filename) < 1) {
     stop("'filename' must be a valid file path, or url, or GDAL data source string")
   }
-  gt <- affinity:::raster_to_gt(target)
+  gt <- affinity:::raster_to_gt(target)   ## hypertidy/affinity
   dm <- dim(target)[2:1]
   wkt <- sf::st_crs(raster::projection(target))$wkt
   if (anyNA(band)) {
@@ -47,38 +47,3 @@ plotRGB(brick(r0, g0, b0))
 
 plotRGB(w1)
 plotRGB(w2)
-
-maps::map(add = TRUE)
-
-
-
-pmap <- function(prj, add = TRUE, sub = 10, ...) {
-  xy <- do.call(cbind, maps::map(plot = FALSE)[1:2])
-  if (sub > 1) {
-    xy <- xy[seq(1, nrow(xy), by = sub), ]
-    if (nrow(xy) < 2) stop("sub too high, try 'sub = 20'")
-  }
-
-  if (!missing(prj)) {
-    if (!inherits(prj, "character")) {
-      prj <- crsmeta::crs_proj(prj)
-    }
-    if (!is.na(prj)) {
-      #browser()
-      xy <- reproj::reproj(xy, prj, source = "+proj=longlat +datum=WGS84")[,1:2]
-    }
-  }
-  if (add) {
-    usr <- spex::spex()
-    usr <- spex::buffer_extent(usr, mean(c(diff(spex::xlim(usr)), diff(spex::ylim(usr))))/10)
-    asub <- xy[,1L] >= raster::xmin(usr) & xy[,1L] <= raster::xmax(usr) &
-      xy[,2L] >= raster::ymin(usr) & xy[,2L] <= raster::ymax(usr)
-    xy <- xy[asub, ]
-  }
-  if (nrow(xy) < 2) stop("sub too high, try 'sub = 20'")
-
-  if (add) lines(xy, ...) else plot(xy, type = "l", ...)
-}
-
-plot(w2)
-pmap(w2, col = "red", lwd = 2, add = T)
