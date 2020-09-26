@@ -4,3 +4,4 @@
 ^CODE_OF_CONDUCT\.md$
 ^autom4te.cache$
 ^config\..*
+^data-raw$
