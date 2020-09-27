@@ -7,7 +7,7 @@ f <- system.file("extdata/bluemarble.tif", package = "dirigible", mustWork = TRU
 ## wrap up the setup
 
 warp <- function(filename, target, ..., band = NA_integer_, src_wkt = "") {
-  if (!is.character(filename) || nchar(filename) < 1) {
+  if (!is.character(filename) || any(nchar(filename) < 1)) {
     stop("'filename' must be a valid file path, or url, or GDAL data source string")
   }
   gt <- affinity:::raster_to_gt(target)   ## hypertidy/affinity
@@ -47,3 +47,22 @@ plotRGB(brick(r0, g0, b0))
 
 plotRGB(w1)
 plotRGB(w2)
+
+
+## multiple input files?
+
+ff <- raadfiles::rema_8m_files()
+
+files <- c("/rdsi/PUBLIC/raad/data/ftp.data.pgc.umn.edu/elev/dem/setsm/REMA/mosaic/v1.0/8m/37_23/37_23_8m_dem.tif",
+  "/rdsi/PUBLIC/raad/data/ftp.data.pgc.umn.edu/elev/dem/setsm/REMA/mosaic/v1.0/8m/37_24/37_24_8m_dem.tif"
+)
+
+ofiles <- c(tempfile(fileext = ".tif"), tempfile(fileext = ".tif"))
+writeRaster(as_raster(lazyraster(files[1])), ofiles[1])
+writeRaster(as_raster(lazyraster(files[2])), ofiles[2])
+
+
+library(raster)
+ex <- raster::union(extent(raster(files[1])), extent(raster(files[2])))
+rr <- raster(ex, nrows = 200, ncols = 800, crs = projection(raster(files[1])))
+a <- warp(ofiles, rr)

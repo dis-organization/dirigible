@@ -35,7 +35,9 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   // allow choice of driver, output file
   // DONE multiple bands
   // DONE band selection
-  std::vector<GDALDatasetH> po_SrcDS(source_filename.size());
+  //std::vector<GDALDatasetH> po_SrcDS(source_filename.size());
+  GDALDatasetH *po_SrcDS;
+  po_SrcDS = static_cast<GDALDatasetH *>(CPLRealloc(po_SrcDS, sizeof(GDALDatasetH) * source_filename.size()));
 
   GDALDatasetH hDstDS;
   GDALRasterBandH poBand, dstBand;
@@ -56,8 +58,10 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
      if (i == 0) {
        Rprintf("setting projection");
      }
+
     GDALSetProjection( po_SrcDS[i], source_WKT[0] );
    }
+    //Rprintf("%i\n", i);
   }
 
   //TODO need type handling for nodata
@@ -86,7 +90,8 @@ inline List gdal_warp_in_memory(CharacterVector source_filename,
   GDALWarpAppOptions* psOptions = GDALWarpAppOptionsNew(options_char.data(), NULL);
 
   int err_0 = 0;
-  GDALDatasetH hOutDS = GDALWarp(NULL, hDstDS, 1, po_SrcDS.data(), psOptions, &err_0);
+
+  GDALDatasetH hOutDS = GDALWarp(NULL, hDstDS, 1, po_SrcDS, psOptions, &err_0);
 
 
    double *double_scanline;
