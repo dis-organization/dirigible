@@ -26,6 +26,18 @@ inline void osr_cleanup() {
   OSRCleanup();
 }
 
+inline CharacterVector gdal_layer_has_geometry(OGRLayer *poLayer) {
+  CharacterVector out(1);
+  poLayer->ResetReading();
+
+  //OGRFeature *poFeature = poLayer->GetNextFeature();
+  OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+  OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(0);
+  const char *geom_name =    poGFDefn->GetNameRef();
+  out[0] = geom_name;
+  //OGRFeature::DestroyFeature( poFeature );
+  return out;
+}
 // this force function takes cheap count, checks, then more expensive, checks,
 // then iterates and resets reading
 inline double force_layer_feature_count(OGRLayer *poLayer) {
@@ -504,6 +516,7 @@ inline List gdal_read_geometry(CharacterVector dsn,
           feature_xx.push_back(r_gtyp);
         }
       }
+
       OGRFeature::DestroyFeature( poFeature );
       lFeature = lFeature + 1;
     }  //    if (iFeature >= skip_n[0]) {  // we are at skip_n
@@ -540,14 +553,17 @@ inline List gdal_read_names(CharacterVector dsn,
 {
 
   GDALDataset       *poDS;
-  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR, NULL, NULL, NULL );
+  Rprintf("0\n");
+  poDS = (GDALDataset*) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL );
+  Rprintf("open\n");
   if( poDS == NULL )
   {
     Rcpp::stop("Open failed.\n");
   }
 
+  Rprintf("0\n");
   OGRLayer *poLayer = gdal_layer(poDS, layer, sql = sql, ex =  ex);
-
+  Rprintf("layer\n");
   OGRFeature *poFeature;
   poLayer->ResetReading();
 
@@ -580,6 +596,7 @@ inline List gdal_read_names(CharacterVector dsn,
 
   double aFID;
   Rcpp::NumericVector rFID(1);
+  Rprintf("0\n");
   while( (poFeature = poLayer->GetNextFeature()) != NULL )
   {
 
@@ -594,6 +611,7 @@ inline List gdal_read_names(CharacterVector dsn,
     if (limit_n[0] > 0 && lFeature >= limit_n[0]) {
       break;  // short-circuit for limit_n
     }
+    Rprintf("%i\n", iFeature);
   }
   // clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
   if (sql[0] != "") {
