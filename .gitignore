@@ -5,3 +5,6 @@ autom4te.cache
 config.*
 inst/doc
 gdalwmscache
+inst/gdal
+inst/proj
+windows
